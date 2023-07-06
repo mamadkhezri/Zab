@@ -1,0 +1,46 @@
+
+body{
+    font-family: 'Roboto', sans-serif;;
+    font-size: x-large;
+}
+
+
+.navbar {
+    background: rgb(16, 0, 194);
+    background: linear-gradient(34deg, rgba(16, 0, 194, 1) 50%, rgba(0, 9, 255, 1) 50%);
+}
+
+.btn {
+    background-color: aliceblue;
+    transition-duration: 0.4s;
+    border-radius: 30px;
+
+}
+
+.btn:hover {
+    background-color: white;
+    color: black;
+}
+
+.navbar li a {
+    font-size: large;
+    color: #333;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: rgb(17, 4, 4);
+
+}
+
+
+.form-control {
+    border: none;
+    border-radius: 30px;
+}
+
+.navbar-toggler {
+    background-color: white;
+    border-radius: 10px;
+          
+}

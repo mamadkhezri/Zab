@@ -1,0 +1,53 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    font-family: 'Roboto', sans-serif;
+    font-size: x-large;
+    align-items: center;
+    justify-content: center;
+    background: rgb(16, 0, 194);
+    background: -moz-linear-gradient(34deg, rgba(16, 0, 194, 1) 50%, rgba(0, 9, 255, 1) 50%);
+    background: -webkit-linear-gradient(34deg, rgba(16, 0, 194, 1) 50%, rgba(0, 9, 255, 1) 50%);
+    background: linear-gradient(34deg, rgba(16, 0, 194, 1) 50%, rgba(0, 9, 255, 1) 50%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#1000c2", endColorstr="#0009ff", GradientType=1);
+}
+
+.login {
+    width: 360px;
+    height: min-content;
+    padding: 20px;
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.login h1 {
+    font-size: 36px;
+    margin-bottom: 26px;
+}
+
+.login form {
+    font-size: 20px;
+
+}
+
+.login form .form-group {
+    margin-bottom: 12px;
+
+}
+
+.login form input[type=submit] {
+    font-size: 25px;
+    margin-top: 25px;
+
+}
+
+.btn {
+    background: rgb(16, 0, 194);
+    background: linear-gradient(34deg, rgba(16, 0, 194, 1) 50%, rgba(0, 9, 255, 1) 50%);
+}
