@@ -1,3 +1,5 @@
+from typing import Any
+from django import http
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .forms import UserRegistrationForm, UserLoginForm
@@ -37,6 +39,15 @@ class UserLoginView(View):
 	form_class = UserLoginForm
 	template_name = 'accounts/login.html'
 
+	def setup(self, request,  *args: Any, **kwargs: Any) -> None:
+		self.next = request.GET.get('next')
+		return super().setup(request, *args, **kwargs)
+	
+	def dispatch(self, request , *args: Any, **kwargs: Any):
+		if request.user.is_authenticated:
+			return redirect ('home:home')
+		return super().dispatch(request, *args, **kwargs)
+
 	def get(self, request):
 		form = self.form_class
 		return render(request, self.template_name, {'form':form})
@@ -49,9 +60,18 @@ class UserLoginView(View):
 			user = authenticate(request, username=cd['username'], password=cd['password'])
 			if user is not None:
 				login(request, user)
+				if self.next:
+					return redirect(self.next)
 				return redirect('home:home')
 			messages.error(request, 'username or password is wrong', 'warning')
 		return render(request, self.template_name, {'form':form})
+	
+
+
+class UserLogoutView(LoginRequiredMixin,View):
+	def get (self , request):
+		logout(request)
+		return redirect('home:home')
 	
 	
 
