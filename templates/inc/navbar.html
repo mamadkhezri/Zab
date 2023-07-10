@@ -42,7 +42,7 @@
                             Dropdown
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'accounts:user_profile' request.user.id %}">Profile</a></li>
                             <li><a class="dropdown-item" href="#">Category</a></li>
                             <li>
                                 <hr class="dropdown-divider">
@@ -52,7 +52,7 @@
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link text-light" href="#" tabindex="-1" aria-disabled="true">Signup</a>
+                        <a class="nav-link text-light" href= "{% url 'accounts:user_register' %}" tabindex="-1" aria-disabled="true">Register</a>
                         <li class="nav-item">
                             <a class="nav-link text-light" href="{% url 'accounts:user_login' %}" tabindex="-1" aria-disabled="true">Login</a>
                         </li>
