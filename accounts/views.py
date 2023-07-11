@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login , logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 
@@ -28,7 +29,7 @@ class UserRegisterView(View):
 		form = self.form_class(request.POST)
 		if form.is_valid():
 			cd = form.cleaned_data
-			User.objects.create_user(cd['username'], cd['email'], cd['password1'])
+			User.objects.create_user( cd['username'], cd['email'], cd['password1'])
 			messages.success(request, 'you registered successfully', 'success')
 			return redirect('home:home')
 		return render(request, self.template_name, {'form':form})
@@ -80,5 +81,8 @@ class UserProfileView(LoginRequiredMixin, View):
 		user = get_object_or_404(User ,pk=user_id)
 		return render(request, 'accounts/profile.html',{'user':user,})
 	
+
+
+
 
 
