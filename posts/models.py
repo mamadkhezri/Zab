@@ -26,6 +26,9 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.title} - {self.slug} - {self.created_date}'
+    
+
+
         
 
 
