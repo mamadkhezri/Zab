@@ -20,38 +20,20 @@
 
     <div class="container mt-4">
         <h1 class="text-center mb-4">User Posts</h1>
-    
+        {% for post in posts %}
         <div class="row">
           <div class="col-lg-4 col-md-6">
             <div class="card mb-4">
-              <img src="image1.jpg" class="card-img-top" alt="Post 1">
+              <img src="{{MEDIA_URL}}" class="card-img-top" alt="{{ post.title }}">
               <div class="card-body">
-                <h5 class="card-title">Post 1</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <h5 class="card-title"> {{post.title}} </h5>
+                <p class="card-text"> {{post.content|truncatewords:8}} </p>
                 <a href="#" class="btn btn-primary">Read More</a>
               </div>
             </div>
           </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="card mb-4">
-              <img src="image2.jpg" class="card-img-top" alt="Post 2">
-              <div class="card-body">
-                <h5 class="card-title">Post 2</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <a href="#" class="btn btn-primary">Read More</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="card mb-4">
-              <img src="image3.jpg" class="card-img-top" alt="Post 3">
-              <div class="card-body">
-                <h5 class="card-title">Post 3</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <a href="#" class="btn btn-primary">Read More</a>
-              </div>
-            </div>
-          </div>
+          
+          {% endfor %}
         </div>
       </div>
       
