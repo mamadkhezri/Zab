@@ -57,8 +57,11 @@
     {% block content %}
     <div class="post">
         <div class="post-buttons">
-            <button>Update Post</button>
-            <button>Delete Post</button>
+            {% if post.author == request.user %}
+                <a href="{% url 'posts:post_delete' post.id %}"><button>Delete Post</button></a>
+                <a href="{% url 'posts:post_update' post.id %}"><button>Update Post</button></a>
+            {% endif %}
+            
         </div>
 
         <div class="post-metadata">
