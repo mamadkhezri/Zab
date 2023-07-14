@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
@@ -27,38 +28,32 @@ class PostDeleteView(LoginRequiredMixin, View):
         return redirect('home:home')
     
 
+
+
 class PostUpdateView(LoginRequiredMixin, View):
-    form_class = PostUpdateForm
-    
-    def setup(self, request, *args, **kwargs):
-	    self.post_instance = get_object_or_404(Post, pk=kwargs['post_id'])
-            return super().setup(request, *args, **kwargs)
+    def get(self, request, post_id):
+        post = get_object_or_404(Post, pk=post_id)
+        if post.author.id == request.user.id:
+            form = PostUpdateForm(instance=post)
+            return render(request, 'posts/update.html', {'form': form, 'post': post})
+        else:
+            messages.error(request, 'You cannot update this post.', 'danger')
+            return redirect('home:home')
 
-    
-    def dispatch(self, request, *args, **kwargs):
-		post = self.post_instance
-		if not post.user.id == request.user.id:
-			messages.error(request, 'you cant update this post', 'danger')
-			return redirect('home:home')
-		return super().dispatch(request, *args, **kwargs)
-    
-
-    def get(self, request, *args, **kwargs):
-		post = self.post_instance        
-		form = self.form_class(instance=post)
-		return render(request, 'posts/update.html', {'form':form})
-    
-
-    def post(self, request, *args, **kwargs):
-		post = self.post_instance
-		form = self.form_class(request.POST, instance=post)
-		if form.is_valid():
-			new_post = form.save(commit=False)
-			new_post.slug = slugify(form.cleaned_data['body'][:30])
-			new_post.save()
-			messages.success(request, 'you updated this post', 'success')
-			return redirect('home:post_detail', post.id, post.slug)
-        
+    def post(self, request, post_id):
+        post = get_object_or_404(Post, pk=post_id)
+        if post.author.id == request.user.id:
+            form = PostUpdateForm(request.POST, request.FILES, instance=post)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Post updated successfully.')
+                return redirect('posts:post_detail', post_id=post.id, post_slug=post.slug)
+            else:
+                messages.error(request, 'Failed to update the post.', 'danger')
+                return render(request, 'posts/update.html', {'form': form, 'post': post})
+        else:
+            messages.error(request, 'You cannot update this post.', 'danger')
+            return redirect('home:home')
 
 
     
