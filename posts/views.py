@@ -1,3 +1,5 @@
+from typing import Any
+from django import http
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
@@ -31,8 +33,13 @@ class PostDeleteView(LoginRequiredMixin, View):
 
 
 class PostUpdateView(LoginRequiredMixin, View):
+
+    def setup(self, request, *args: Any, **kwargs: Any):
+        self.post_instance = get_object_or_404(Post, pk=kwargs['post_id'])
+        return super().setup(request, *args, **kwargs)
+
     def get(self, request, post_id):
-        post = get_object_or_404(Post, pk=post_id)
+        post = self.post_instance
         if post.author.id == request.user.id:
             form = PostUpdateForm(instance=post)
             return render(request, 'posts/update.html', {'form': form, 'post': post})
@@ -41,7 +48,7 @@ class PostUpdateView(LoginRequiredMixin, View):
             return redirect('home:home')
 
     def post(self, request, post_id):
-        post = get_object_or_404(Post, pk=post_id)
+        post = self.post_instance
         if post.author.id == request.user.id:
             form = PostUpdateForm(request.POST, request.FILES, instance=post)
             if form.is_valid():
