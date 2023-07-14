@@ -7,8 +7,8 @@ from django.utils.text import slugify
 
 
 class Post(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='blog/')
-    author = models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
     title = models.CharField(max_length=255)
     content = models.TextField()
     upload = models.FileField(upload_to='media/blog/')
@@ -26,6 +26,9 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.title} - {self.slug} - {self.created_date}'
+    
+    def get_absolute_url(self):
+	    return reverse('posts:post_detail', args=(self.pk , self.slug))
     
 
 

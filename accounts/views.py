@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
+from posts.models import Post
 
 
 class UserRegisterView(View):
@@ -77,9 +78,10 @@ class UserLogoutView(LoginRequiredMixin,View):
 
 
 class UserProfileView(LoginRequiredMixin, View):
-	def get (self, request, user_id):
-		user = get_object_or_404(User ,pk=user_id)
-		return render(request, 'accounts/profile.html',{'user':user,})
+    def get(self, request, user_id):
+        user = get_object_or_404(User, pk=user_id)
+        posts = Post.objects.filter(author=user)  # Use 'author' instead of 'user'
+        return render(request, 'accounts/profile.html', {'user': user, 'posts': posts})
 	
 
 

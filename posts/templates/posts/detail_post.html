@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Post Details</title>
+    <style>
+        /* Add your CSS styles here */
+        .post {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .post-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .post-image {
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .post-content {
+            margin-bottom: 20px;
+        }
+
+        .post-metadata {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .post-view-count,
+        .post-author {
+            font-size: 14px;
+        }
+
+        .post-media {
+            margin-bottom: 20px;
+        }
+
+        .post-buttons {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    {% block content %}
+    <div class="post">
+        <div class="post-buttons">
+            <button>Update Post</button>
+            <button>Delete Post</button>
+        </div>
+
+        <div class="post-metadata">
+            <span class="post-view-count"> Views: {{post.counted_views}} </span>
+            <span class="post-author">Author:{{post.author}} </span>
+        </div>
+        
+        <h1 class="post-title"> {{ post.title }} </h1>
+        <img class="post-image" src="{{post.image.url}}" alt="{{ post.title }}">
+        <div class="post-content">
+            <p> {{ post.content }} </p>
+        </div>
+        
+        <div class="post-media">
+            <h2>Related Media</h2>
+        </div>
+    {% endblock %}
+    </div>
+</body>
+</html>
