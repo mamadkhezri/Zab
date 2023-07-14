@@ -45,7 +45,9 @@ class PostUpdateView(LoginRequiredMixin, View):
         if post.author.id == request.user.id:
             form = PostUpdateForm(request.POST, request.FILES, instance=post)
             if form.is_valid():
-                form.save()
+                post.title = form.cleaned_data['title']
+                post.slug = slugify(post.title)
+                post.save()
                 messages.success(request, 'Post updated successfully.')
                 return redirect('posts:post_detail', post_id=post.id, post_slug=post.slug)
             else:
