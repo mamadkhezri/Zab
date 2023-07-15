@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
 from .models import Post
-from .forms import PostUpdateForm
+from .forms import PostUpdateForm, PostCreateForm
 from django.utils.text import slugify
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -63,6 +63,27 @@ class PostUpdateView(LoginRequiredMixin, View):
         else:
             messages.error(request, 'You cannot update this post.', 'danger')
             return redirect('home:home')
+        
+
+
+class PostcreateView(LoginRequiredMixin, View):
+    form_class = PostCreateForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, 'posts/create.html', {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            new_post = form.save(commit=False)
+            new_post.slug = slugify(form.cleaned_data['title'][:30])
+            new_post.author = request.user
+            new_post.save()
+            messages.success(request, 'You created a new post', 'success')
+            return redirect('posts:post_detail', new_post.id, new_post.slug)
+        return render(request, 'posts/create.html', {'form': form})
+
 
 
     
