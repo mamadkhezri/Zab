@@ -82,6 +82,9 @@ class UserProfileView(LoginRequiredMixin, View):
         user = get_object_or_404(User, pk=user_id)
         posts = Post.objects.filter(author=user)  # Use 'author' instead of 'user'
         return render(request, 'accounts/profile.html', {'user': user, 'posts': posts})
+    
+
+
 	
 
 
