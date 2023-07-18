@@ -1,61 +1,88 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+      name="viewport"
+    />
     <title>Profile</title>
-    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
     <div class="container py-5">
-        <div class="row">
-            <div class="col-md-3">
-                <!-- User Photo -->
-                <div class="bg-white shadow rounded-lg mb-4">
-                    <div class="text-center pt-3">
-                        <img src="{% static 'img/user2.jpg' %}" alt="User" class="img-thumbnail">
-                    </div>
-                    <div class="p-3">
-                        <h4 class="text-center">{{ user.username }}</h4>
-                        <!-- User Stats (Total Posts, Followers, etc.) -->
-                        <ul class="list-unstyled">
-                            <li>Total Posts: 2</li>
-                            <li>Followers: 1000</li>
-                            <button class="btn btn-primary mt-3">Follow</button>
-                            <button class="btn btn-danger mt-3">Unfollow</button>
-                            <button class="btn btn-outline-secondary mt-3">Edit Profile</button>
-                            <p class="mt-3">Bio: Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, molestias ad? Quo corrupti amet, assumenda libero nam accusantium error asperiores necessitatibus temporibus dolorum placeat nisi! Vero impedit natus dolore aspernatur?</p>
-                            <!-- Add more user stats as needed -->
-                        </ul>
-                    </div>
-                </div>
-                <!-- Half of the User -->
-                <div class="bg-white shadow rounded-lg mb-4">
-                    <!-- Add content for half of the user -->
-                </div>
+      <div class="row">
+        <div class="col-md-3">
+          <!-- User Photo -->
+          <div class="bg-white shadow rounded-lg mb-4">
+            <div class="text-center pt-3">
+              <img
+                src="{% static 'img/user2.jpg' %}"
+                alt="User"
+                class="img-thumbnail"
+              />
             </div>
-            <div class="col-md-9">
-                <!-- User's Uploaded Posts -->
-                <div class="bg-white shadow rounded-lg">
-                    <div class="p-4">
-                        <h3 class="mb-4">Your Uploaded Posts</h3>
-                        <!-- Loop through and display the user's uploaded posts -->
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <p>First uploaded post content goes here.</p>
-                            </div>
-                        </div>
-                        <!-- Add more posts as needed -->
-                    </div>
-                </div>
-                <!-- Two Posts - Follower and Unfollowed -->
-                
-            </div>
+            <div class="p-3">
+              <h4 class="text-center">{{ user.username }}</h4>
+              <!-- User Stats (Total Posts, Followers, etc.) -->
+              <ul class="list-unstyled">
+                  <li>Total Posts: 2</li>
+                  <li>Followers: 1000</li>
+          
+                  {% if user != request.user %}
+                      {% if not is_following %}
+                          <!-- Show Follow button if the current user is not following the profile user -->
+                          <a class="btn btn-primary mt-3" href="{% url 'accounts:user_follow' user.id %}">Follow</a>
+                      {% else %}
+                          <!-- Show Unfollow button if the current user is following the profile user -->
+                          <a class="btn btn-danger mt-3" href="{% url 'accounts:user_unfollow' user.id %}">Unfollow</a>
+                      {% endif %}
+                  {% endif %}
+          
+              </ul>
+          </div>
+          
+          
+            
+          </div>
+          <!-- Half of the User -->
+          <div class="bg-white shadow rounded-lg mb-4">
+            <!-- Add content for half of the user -->
+          </div>
         </div>
+        <div class="col-md-9">
+          <!-- User's Uploaded Posts -->
+          <div class="bg-white shadow rounded-lg">
+            <div class="p-4">
+              <h3 class="mb-4">Your Uploaded Posts</h3>
+              <!-- Loop through and display the user's uploaded posts -->
+              <div class="card mb-3">
+                <div class="card-body">
+                  <p>First uploaded post content goes here.</p>
+                </div>
+              </div>
+              <!-- Add more posts as needed -->
+            </div>
+          </div>
+          <!-- Two Posts - Follower and Unfollowed -->
+        </div>
+      </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
-</body>
+    <script>
+      // Assuming you are using jQuery
+      $.ajaxSetup({
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+        },
+      });
+    </script>
+  </body>
 </html>
