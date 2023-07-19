@@ -33,6 +33,18 @@ class Post(models.Model):
     
 
 
+class Comment(models.Model):
+    author= models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_comments')
+    post= models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_comments')
+    reply = models.ForeignKey('self', on_delete=models.CASCADE, related_name='replay_comments', blank=True, null=True)
+    is_replay= models.BooleanField(default=False)
+    comment= models.TextField(max_length=400)
+    created = models.DateTimeField(auto_now_add=True)
+    
+
+	
+
+
         
 
 

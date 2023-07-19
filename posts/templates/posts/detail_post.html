@@ -78,7 +78,31 @@
         <div class="post-media">
             <h2>Related Media</h2>
         </div>
-    {% endblock %}
+
+        <h3>Comments</h3>
+<div class="list-group">
+    {% for comment in comments %}
+        <div class="list-group-item">
+            <p class="mb-1">{{ comment.comment }}</p>
+            <small class="text-muted">Posted by {{ comment.author }} on {{ comment.created }}</small>
+        </div>
+    {% empty %}
+        <p>No comments yet.</p>
+    {% endfor %}
+</div>
+
+<hr>
+
+<h3>Add a Comment</h3>
+<form method="post" action="">
+    {% csrf_token %}
+    <div class="form-group">
+        <textarea class="form-control" name="content" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Post Comment</button>
+</form>
+
+{% endblock %}
     </div>
 </body>
 </html>

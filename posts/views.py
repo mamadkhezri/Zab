@@ -5,17 +5,47 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
 from .models import Post
-from .forms import PostUpdateForm, PostCreateForm
+from .forms import PostUpdateForm, PostCreateForm, CommentCreateForm
 from django.utils.text import slugify
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 
 
 class PostDetailView(View):
+    form_class = CommentCreateForm
+
     def get(self, request, post_id, post_slug):
-        post = get_object_or_404(Post, pk=post_id, slug=post_slug)
-        return render(request, 'posts/detail_post.html', {'post': post})
+        post_instance = get_object_or_404(Post, pk=post_id, slug=post_slug)
+        comments = post_instance.post_comments.filter(is_replay=False)
+        form = self.form_class()
+
+        return render(request, 'posts/detail_post.html', {
+            'post': post_instance,
+            'comments': comments,
+            'form': form
+        })
+
+    @method_decorator(login_required)
+    def post(self, request, post_id, post_slug):
+        post_instance = get_object_or_404(Post, pk=post_id, slug=post_slug)
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.author = request.user
+            new_comment.post = post_instance
+            new_comment.save()
+            messages.success(request, 'Your comment has been submitted successfully.', extra_tags='success')
+            return redirect('posts:post_detail', post_id=post_id, post_slug=post_slug)
+
+        comments = post_instance.comments.filter(is_replay=False)
+        return render(request, 'posts/detail_post.html', {
+            'post': post_instance,
+            'comments': comments,
+            'form': form
+        })
     
 
 
