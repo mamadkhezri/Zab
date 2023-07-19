@@ -3,6 +3,7 @@ from django import http
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http.response import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .forms import UserRegistrationForm, UserLoginForm
@@ -47,9 +48,8 @@ class UserLoginView(View):
     success_url = 'home:home'
 
     def setup(self, request, *args, **kwargs):
-        self.next = request.GET.get('next')
+        self.next= request.GET.get('next', None)
         return super().setup(request, *args, **kwargs)
-
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
