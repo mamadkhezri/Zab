@@ -1,5 +1,7 @@
 from typing import Any
 from django import http
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
@@ -42,14 +44,16 @@ class UserRegisterView(View):
 class UserLoginView(View):
     form_class = UserLoginForm
     template_name = 'accounts/login.html'
+    success_url = 'home:home'
 
-    def setup(self, request,  *args: Any, **kwargs: Any) -> None:
+    def setup(self, request, *args, **kwargs):
         self.next = request.GET.get('next')
         return super().setup(request, *args, **kwargs)
 
-    def dispatch(self, request, *args: Any, **kwargs: Any):
+
+    def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('home:home')
+            return redirect(self.success_url)
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
@@ -66,8 +70,9 @@ class UserLoginView(View):
                 login(request, user)
                 if self.next:
                     return redirect(self.next)
-                return redirect('home:home')
-            messages.error(request, 'username or password is wrong', 'warning')
+                return redirect(self.success_url)
+            else:
+                messages.error(request, 'username or password is wrong', 'warning')
         return render(request, self.template_name, {'form': form})
 
 
@@ -77,7 +82,8 @@ class UserLogoutView(LoginRequiredMixin, View):
         return redirect('home:home')
 
 
-class UserProfileView(LoginRequiredMixin, View):
+class UserProfileView(View):
+    @method_decorator(login_required(login_url='/accounts/login/'))
     def get(self, request, user_id):
         is_following = False
         user = get_object_or_404(User, pk=user_id)
