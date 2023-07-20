@@ -54,7 +54,6 @@
 </head>
 <body>
 
-    {% block content %}
     <div class="post">
         <div class="post-buttons">
             {% if post.author == request.user %}
@@ -94,22 +93,19 @@
 <hr>
 
 <h3>Add a Comment</h3>
-<form method="post" action="">
+<form method="post" action="{% url 'posts:post_detail' post.id post.slug %}">
     {% csrf_token %}
-    <div class="form-group">
-        <textarea class="form-control" name="content" rows="3"></textarea>
-    </div>
+    {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Post Comment</button>
 </form>
 
-{% if request.user.is_authenticated %}
-    {% if comment %}
-        <form action="{% url 'posts:comment_reply' post.id comment.id %}" method="post">
-            {% csrf_token %}
-            {{ reply_form.as_p }}
-            <input type="submit" value="reply">
-        </form>
-    {% endif %}
+{% if request.user.is_authenticated and comment %}
+    <h3>Reply to Comment</h3>
+    <form method="post" action="{% url 'posts:add_reply' post.id comment.id %}">
+        {% csrf_token %}
+        {{ reply_form.as_p }}
+        <button type="submit">Post Reply</button>
+    </form>
 {% endif %}
 
 {% with replies=comment.reply_comments.all %}
@@ -118,7 +114,6 @@
     {% endfor %}
 {% endwith %}
 
-{% endblock %}
     </div>
 </body>
 </html>

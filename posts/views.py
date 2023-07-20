@@ -22,11 +22,13 @@ class PostDetailView(View):
         post_instance = get_object_or_404(Post, pk=post_id, slug=post_slug)
         comments = post_instance.post_comments.filter(is_reply=False)
         form = self.form_class()
+        reply_form = self.form_class_reply()
 
         return render(request, 'posts/detail_post.html', {
             'post': post_instance,
             'comments': comments,
-            'form': form
+            'form': form,
+            'reply_form':self.form_class_reply,
         })
 
     @method_decorator(login_required)
@@ -39,7 +41,14 @@ class PostDetailView(View):
             new_comment.post = post_instance
             new_comment.save()
             messages.success(request, 'Your comment has been submitted successfully.', extra_tags='success')
-        return redirect('posts:post_detail', post_id=post_id, post_slug=post_slug)
+
+        reply_form = self.form_class_reply(request.POST)
+        return render(request, 'posts/detail_post.html', {
+            'post': post_instance,
+            'comments': post_instance.post_comments.filter(is_reply=False),
+            'form': form,
+            'reply_form': reply_form,
+        })
 
 
 class PostDeleteView(LoginRequiredMixin, View):
