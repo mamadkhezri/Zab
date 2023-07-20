@@ -4,8 +4,8 @@ from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
-from .models import Post
-from .forms import PostUpdateForm, PostCreateForm, CommentCreateForm
+from .models import Post, Comment
+from .forms import PostUpdateForm, PostCreateForm, CommentCreateForm, CommentReplyForm 
 from django.utils.text import slugify
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -16,6 +16,7 @@ from django.utils.decorators import method_decorator
 
 class PostDetailView(View):
     form_class = CommentCreateForm
+    form_class_reply = CommentReplyForm
 
     def get(self, request, post_id, post_slug):
         post_instance = get_object_or_404(Post, pk=post_id, slug=post_slug)
@@ -38,15 +39,7 @@ class PostDetailView(View):
             new_comment.post = post_instance
             new_comment.save()
             messages.success(request, 'Your comment has been submitted successfully.', extra_tags='success')
-            return redirect('posts:post_detail', post_id=post_id, post_slug=post_slug)
-
-        comments = post_instance.comments.filter(is_replay=False)
-        return render(request, 'posts/detail_post.html', {
-            'post': post_instance,
-            'comments': comments,
-            'form': form
-        })
-    
+        return redirect('posts:post_detail', post_id=post_id, post_slug=post_slug)
 
 
 class PostDeleteView(LoginRequiredMixin, View):
@@ -113,7 +106,23 @@ class PostcreateView(LoginRequiredMixin, View):
             messages.success(request, 'You created a new post', 'success')
             return redirect('posts:post_detail', new_post.id, new_post.slug)
         return render(request, 'posts/create.html', {'form': form})
+    
 
+class PostAddReplyView(LoginRequiredMixin, View):
+    form_class = CommentReplyForm
+
+    def post(self, request, post_id, comment_id):
+        post_instance = get_object_or_404(Post, id=post_id)
+        comment_instance = get_object_or_404(Comment, id=comment_id)
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.author = request.user
+            reply.post = post_instance
+            reply.reply = comment_instance
+            reply.is_reply = True
+            reply.save()
+        return redirect('posts:post_detail', pk=post_instance.pk, slug=post_instance.slug)
 
 
     

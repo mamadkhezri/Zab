@@ -84,7 +84,7 @@
     {% for comment in comments %}
         <div class="list-group-item">
             <p class="mb-1">{{ comment.comment }}</p>
-            <small class="text-muted">Posted by {{ comment.author }} on {{ comment.created }}</small>
+            <small class="text-muted">Posted by {{ comment.author }} on {{ comment.created|timesince }}</small>
         </div>
     {% empty %}
         <p>No comments yet.</p>
@@ -101,6 +101,22 @@
     </div>
     <button type="submit" class="btn btn-primary">Post Comment</button>
 </form>
+
+{% if request.user.is_authenticated %}
+    {% if comment %}
+        <form action="{% url 'posts:comment_reply' post.id comment.id %}" method="post">
+            {% csrf_token %}
+            {{ reply_form.as_p }}
+            <input type="submit" value="reply">
+        </form>
+    {% endif %}
+{% endif %}
+
+{% with replies=comment.reply_comments.all %}
+    {% for reply in replies %}
+        <p>{{ reply.author }} <br/> {{ reply.comment }}</p>
+    {% endfor %}
+{% endwith %}
 
 {% endblock %}
     </div>

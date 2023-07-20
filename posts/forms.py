@@ -18,3 +18,10 @@ class CommentCreateForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['comment']
+	
+
+
+class CommentReplyForm(forms.ModelForm):
+	class Meta:
+		model = Comment
+		fields = ['comment']
