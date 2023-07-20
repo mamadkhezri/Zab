@@ -29,7 +29,11 @@ class Post(models.Model):
         return f'{self.title} - {self.slug} - {self.created_date}'
     
     def get_absolute_url(self):
-        return reverse('posts:post_detail', args=[str(self.pk), self.slug])
+        print("PK:", self.pk)
+        print("Slug:", self.slug)
+        url = reverse('posts:post_detail', args=[str(self.pk), self.slug])
+        print("Generated URL:", url)
+        return url
     
 
 
