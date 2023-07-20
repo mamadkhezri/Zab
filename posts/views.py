@@ -28,7 +28,7 @@ class PostDetailView(View):
             'post': post_instance,
             'comments': comments,
             'form': form,
-            'reply_form':self.form_class_reply,
+            'reply_form': reply_form,
         })
 
     @method_decorator(login_required)
@@ -41,11 +41,16 @@ class PostDetailView(View):
             new_comment.post = post_instance
             new_comment.save()
             messages.success(request, 'Your comment has been submitted successfully.', extra_tags='success')
+            
 
-        reply_form = self.form_class_reply(request.POST)
+            form = self.form_class()
+        
+        comments = post_instance.post_comments.filter(is_reply=False)
+        reply_form = self.form_class_reply()
+
         return render(request, 'posts/detail_post.html', {
             'post': post_instance,
-            'comments': post_instance.post_comments.filter(is_reply=False),
+            'comments': comments,
             'form': form,
             'reply_form': reply_form,
         })

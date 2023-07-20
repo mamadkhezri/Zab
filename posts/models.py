@@ -29,7 +29,7 @@ class Post(models.Model):
         return f'{self.title} - {self.slug} - {self.created_date}'
     
     def get_absolute_url(self):
-	    return reverse('posts:post_detail', args=(self.pk , self.slug))
+        return reverse('posts:post_detail', args=[str(self.pk), self.slug])
     
 
 
