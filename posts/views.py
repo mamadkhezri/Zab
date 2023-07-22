@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
 from .models import Post, Comment, vote
+from django.http import JsonResponse
 from .forms import PostUpdateForm, PostCreateForm, CommentCreateForm, CommentReplyForm 
 from django.utils.text import slugify
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -32,6 +33,7 @@ class PostDetailView(View):
             'comments': comments,
             'form': form,
             'reply_form': reply_form,
+            'can_like':can_like
         })
 
     @method_decorator(login_required)
@@ -147,6 +149,17 @@ class LikePostView(LoginRequiredMixin, View):
         like, created = vote.objects.get_or_create(author=request.user, post=post)
         if not created:
             like.delete()
+        return redirect('posts:post_detail', post.id, post.slug)
+    
+class UnlikePostView(LoginRequiredMixin, View):
+    def post(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        try:
+            like = vote.objects.get(author=request.user, post=post)
+            like.delete()
+        except vote.DoesNotExist:
+            pass
+        
         return redirect('posts:post_detail', post.id, post.slug)
 
 

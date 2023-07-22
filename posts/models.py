@@ -36,11 +36,7 @@ class Post(models.Model):
         return url
     
     def user_can_like(self, user):
-        user_like = user.uvotes.filter(post=self)
-        if user_like.exists():
-            return True
-        return False
-    
+        return user.uvotes.filter(post=self).exists()
 
 
 class Comment(models.Model):
