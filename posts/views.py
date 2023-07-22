@@ -144,7 +144,7 @@ class PostAddReplyView(LoginRequiredMixin, View):
         return redirect('posts:post_detail', pk=post_instance.pk, slug=post_instance.slug)
     
 class LikePostView(LoginRequiredMixin, View):
-    def post(self, request, post_id):
+    def get(self, request, post_id):
         post = get_object_or_404(Post, id=post_id)
         like, created = vote.objects.get_or_create(author=request.user, post=post)
         if not created:
@@ -152,7 +152,7 @@ class LikePostView(LoginRequiredMixin, View):
         return redirect('posts:post_detail', post.id, post.slug)
     
 class UnlikePostView(LoginRequiredMixin, View):
-    def post(self, request, post_id):
+    def get(self, request, post_id):
         post = get_object_or_404(Post, id=post_id)
         try:
             like = vote.objects.get(author=request.user, post=post)
