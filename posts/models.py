@@ -35,6 +35,12 @@ class Post(models.Model):
         print("Generated URL:", url)
         return url
     
+    def user_can_like(self, user):
+        user_like = user.uvotes.filter(post=self)
+        if user_like.exists():
+            return True
+        return False
+    
 
 
 class Comment(models.Model):
@@ -47,6 +53,14 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.author.username} on {self.post.title}"
+
+
+class vote(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='uvotes')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='pvotes')
+
+    def __str__(self):
+        return f'{self.author} liked {self.post}'
     
 
 	

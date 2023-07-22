@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
-from .models import Post, Comment
+from .models import Post, Comment, vote
 from .forms import PostUpdateForm, PostCreateForm, CommentCreateForm, CommentReplyForm 
 from django.utils.text import slugify
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -21,6 +21,9 @@ class PostDetailView(View):
     def get(self, request, post_id, post_slug):
         post_instance = get_object_or_404(Post, pk=post_id, slug=post_slug)
         comments = post_instance.post_comments.filter(is_reply=False)
+        can_like = False
+        if request.user.is_authenticated and post_instance.user_can_like(request.user):
+            can_like = True
         form = self.form_class()
         reply_form = self.form_class_reply()
 
@@ -137,6 +140,16 @@ class PostAddReplyView(LoginRequiredMixin, View):
             reply.is_reply = True
             reply.save()
         return redirect('posts:post_detail', pk=post_instance.pk, slug=post_instance.slug)
+    
+class LikePostView(LoginRequiredMixin,View):
+    def post(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        like, created = vote.objects.get_or_create(author=request.user, post=post)
+        if not created:
+            like.delete()
+        return redirect('posts:post_detail', post.id, post.slug)
+
+
 
 
     

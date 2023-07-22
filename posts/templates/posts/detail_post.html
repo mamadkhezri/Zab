@@ -63,6 +63,20 @@
             
         </div>
 
+    {% if user.is_authenticated %}
+        {% if user in post.likes.all %}
+            <form action="{% url 'posts:post_like' post.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">Unlike</button>
+            </form>
+        {% else %}
+            <form action="{% url 'posts:post_like' post.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">Like</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
         <div class="post-metadata">
             <span class="post-view-count"> Views: {{post.counted_views}} </span>
             <a href="{% url 'accounts:user_profile' post.author.id  %}"><span class="post-author">Author:{{post.author}} </span></a>

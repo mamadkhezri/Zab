@@ -10,5 +10,6 @@ urlpatterns = [
     path('post/update/<int:post_id>/', views.PostUpdateView.as_view(), name='post_update'),
     path('post/create', views.PostcreateView.as_view(), name='post_create'),
     path('reply/<int:post_id>/<int:comment_id>/', views.PostAddReplyView.as_view(), name='add_reply'),
+    path('like/<int:post_id>/', views.LikePostView.as_view(), name='post_like')
 
 ]
