@@ -28,12 +28,15 @@ class PostDetailView(View):
         form = self.form_class()
         reply_form = self.form_class_reply()
 
+        likes_count = vote.objects.filter(post=post_instance).count()
+
         return render(request, 'posts/detail_post.html', {
             'post': post_instance,
             'comments': comments,
             'form': form,
             'reply_form': reply_form,
-            'can_like':can_like
+            'can_like': can_like,
+            'likes_count': likes_count, 
         })
 
     @method_decorator(login_required)
