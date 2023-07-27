@@ -87,7 +87,6 @@ class UserProfileView(View):
     def get(self, request, user_id):
         is_following = False
         user = get_object_or_404(User, pk=user_id)
-        # Use 'author' instead of 'user'
         posts = Post.objects.filter(author=user)
         relation= Relation.objects.filter(from_author=request.user, to_author=user )
         if relation.exists():
