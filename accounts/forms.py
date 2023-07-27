@@ -35,6 +35,7 @@ class UserLoginForm(forms.Form):
 
 class EditUserForm(forms.ModelForm):
 	email = forms.EmailField()
+	
 	class Meta:
 		model = Profile
 		fields = ('image', 'age', 'bio')
