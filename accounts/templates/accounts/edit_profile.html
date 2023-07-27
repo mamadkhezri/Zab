@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>edit profile</title>
+</head>
+<body>
+    <h1>Edit Your Profile</h1>
+    <form action="{% url accounts:edit_user %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Edit</button>
+    </form>
+</body>
+</html>
