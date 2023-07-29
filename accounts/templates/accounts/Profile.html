@@ -21,40 +21,57 @@
           <!-- User Photo -->
           <div class="bg-white shadow rounded-lg mb-4">
             <div class="text-center pt-3">
-              <img
-                src="{% static 'img/user2.jpg' %}"
-                alt="User"
-                class="img-thumbnail"
-              />
+              {% if user.profile.image %}
+                <img
+                  src="{{ user.profile.image.url }}"
+                  alt="User"
+                  class="img-thumbnail"
+                />
+              {% else %}
+                <!-- Display a default photo or a message when 'image' is not set -->
+                <img
+                  src="{% static 'img/default_profile.jpg' %}"
+                  alt="Default Profile Photo"
+                  class="img-thumbnail"
+                />
+                <!-- Alternatively, you can show a message -->
+                <!-- <p>No profile photo uploaded</p> -->
+              {% endif %}
             </div>
             <div class="p-3">
               <h4 class="text-center">{{ user.username }}</h4>
               <!-- User Stats (Total Posts, Followers, etc.) -->
               <ul class="list-unstyled">
-                  <li>Total Posts: 2</li>
-                  <li>Followers: 1000</li>
-          
-                  {% if user != request.user %}
-                      {% if not is_following %}
-                          <!-- Show Follow button if the current user is not following the profile user -->
-                          <a class="btn btn-primary mt-3" href="{% url 'accounts:user_follow' user.id %}">Follow</a>
-                      {% else %}
-                          <!-- Show Unfollow button if the current user is following the profile user -->
-                          <a class="btn btn-danger mt-3" href="{% url 'accounts:user_unfollow' user.id %}">Unfollow</a>
-                      {% endif %}
-                  {% endif %}
-          
+                <li>Total Posts: 2</li>
+                <li>Followers: 1000</li>
+                <!-- Follow/Unfollow buttons here -->
               </ul>
+              {% if user == request.user %}
+                <!-- Show Edit Profile link if the user is viewing their own profile -->
+                <a class="btn btn-outline-dark mt-3" href="{% url 'accounts:edit_user' %}">Edit Profile</a>
+              {% else %}
+                {% if not is_following %}
+                  <!-- Show Follow button if the current user is not following the profile user -->
+                  <a class="btn btn-primary mt-3" href="{% url 'accounts:user_follow' user.id %}">Follow</a>
+                {% else %}
+                  <!-- Show Unfollow button if the current user is following the profile user -->
+                  <a class="btn btn-danger mt-3" href="{% url 'accounts:user_unfollow' user.id %}">Unfollow</a>
+                {% endif %}
+              {% endif %}
+            </div>
           </div>
-          
-          
-            
-          </div>
-          <!-- Half of the User -->
+    
+          <!-- Display Family Name, Age, and Biography -->
           <div class="bg-white shadow rounded-lg mb-4">
-            <!-- Add content for half of the user -->
+            <div class="p-3">
+              <p class="text-center">Family Name: {{ user.profile.first_name }}<p></p>
+              <p class="text-center">Family Name: {{ user.profile.family_name }}<p>
+              <p class="text-center">Age: {{ user.profile.age }}</p>
+              <p class="text-center">Biography: {{ user.profile.bio }}</p>
+            </div>
           </div>
         </div>
+    
         <div class="col-md-9">
           <!-- User's Uploaded Posts -->
           <div class="bg-white shadow rounded-lg">
