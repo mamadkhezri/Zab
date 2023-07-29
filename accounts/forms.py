@@ -40,6 +40,12 @@ class EditUserForm(forms.ModelForm):
 		model = Profile
 		fields = ('first_name', 'family_name', 'image', 'age', 'bio')
 
+	def clean_age(self):
+		age = self.cleaned_data.get('age')
+		if age is not None and (age < 1 or age > 100):
+			raise forms.ValidationError("Age must be between 1 and 100.")
+		return age
+
 
 
 

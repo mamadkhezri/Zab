@@ -10,6 +10,9 @@
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
+        {% for error in form.age.errors %}
+            <p class="error">{{ error }}</p>
+        {% endfor %}
         <button type="submit">Edit</button>
     </form>
 </body>
