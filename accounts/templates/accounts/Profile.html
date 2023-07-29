@@ -15,6 +15,25 @@
     />
   </head>
   <body>
+    {% if messages %}
+    <div class="container mt-4" id="messages-container">
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }}
+                </div>
+            {% elif message.tags == 'error' %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    </div>
     <div class="container py-5">
       <div class="row">
         <div class="col-md-3">
@@ -94,12 +113,28 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
     <script>
-      // Assuming you are using jQuery
       $.ajaxSetup({
         headers: {
           "X-CSRFToken": "{{ csrf_token }}",
         },
       });
     </script>
+    <script>
+      // Function to remove the messages after 5 seconds
+      function removeMessages() {
+          setTimeout(function() {
+              var messagesContainer = document.getElementById('messages-container');
+              if (messagesContainer) {
+                  messagesContainer.innerHTML = '';
+              }
+          }, 5000); // 5000 milliseconds = 5 seconds
+      }
+
+      // Call the function when the document is ready
+      document.addEventListener("DOMContentLoaded", function() {
+          removeMessages();
+      });
+  </script>
+
   </body>
 </html>
