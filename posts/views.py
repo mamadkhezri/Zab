@@ -25,6 +25,11 @@ class PostDetailView(View):
         can_like = False
         if request.user.is_authenticated and post_instance.user_can_like(request.user):
             can_like = True
+
+        can_unlike = False
+        if request.user.is_authenticated and vote.objects.filter(author=request.user, post=post_instance).exists():
+            can_unlike = True
+
         form = self.form_class()
         reply_form = self.form_class_reply()
 
@@ -36,7 +41,8 @@ class PostDetailView(View):
             'form': form,
             'reply_form': reply_form,
             'can_like': can_like,
-            'likes_count': likes_count, 
+            'can_unlike': can_unlike,
+            'likes_count': likes_count,
         })
 
     @method_decorator(login_required)
@@ -155,17 +161,18 @@ class LikePostView(LoginRequiredMixin, View):
         return redirect('posts:post_detail', post.id, post.slug)
     
 class UnlikePostView(LoginRequiredMixin, View):
-    def get(self, request, post_id):
-        post = get_object_or_404(Post, id=post_id)
+    def unlike_post(self, request, post):
         try:
-            like = vote.objects.get(author=request.user, post=post)
-            like.delete()
+            existing_like = vote.objects.get(author=request.user, post=post)
+            existing_like.delete()
         except vote.DoesNotExist:
             pass
-        
-        return redirect('posts:post_detail', post.id, post.slug)
-
-
+    def get(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        if request.method == "GET" and request.user.is_authenticated:
+            self.unlike_post(request, post)
+            return redirect('posts:post_detail', post_id=post_id, post_slug=post.slug)
+        return redirect('posts:post_detail', post_id=post_id, post_slug=post.slug)
 
 
 
