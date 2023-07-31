@@ -13,9 +13,8 @@ class HomeView(View):
     form_class = PostSearchForm
 
     def get(self, request):
-        posts = Post.objects.all()  # Change "Posts" to "posts"
-        form = self.form_class(request.GET)  # Create an instance of the form
-
+        posts = Post.objects.all() 
+        form = self.form_class(request.GET)  
         if form.is_valid() and form.cleaned_data['search']:
             search_query = form.cleaned_data['search']
             posts = posts.filter(title__contains=search_query)
