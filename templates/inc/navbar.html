@@ -32,6 +32,9 @@
                     <li class="nav-item">
                         <a class="nav-link text-light" aria-current="page" href="#">Home</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" aria-current="page" href="#">Users</a>
+                    </li>
                     {% if request.user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link text-light" href="{% url 'posts:post_create'%}">Create post</a>
@@ -67,10 +70,6 @@
                             </div>
                         </form>
                     </div>
-                    
-                
-                    
-              
             </div>
         </div>
     </nav>

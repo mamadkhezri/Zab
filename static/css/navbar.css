@@ -11,15 +11,15 @@ body{
 }
 
 .btn {
-    background-color:rgb(16, 0, 194);
+    background-color:#ffffff;
     transition-duration: 0.4s;
     border-radius: 30px;
 
 }
 
 .btn:hover {
-    background-color: white;
-    color: black;
+    background-color: rgb(16, 0, 194);
+    color: rgb(237, 237, 237);
 }
 
 .navbar li a {
