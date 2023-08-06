@@ -141,5 +141,4 @@ AUTHENTICATION_BACKENDS = [
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
-    "/var/www/static/",
 ]
