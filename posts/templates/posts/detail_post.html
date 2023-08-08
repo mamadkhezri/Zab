@@ -74,14 +74,14 @@
         </div>
         
         <h1 class="post-title"> {{ post.title }} </h1>
-        <img class="post-image" src="{{post.image.url}}" alt="{{ post.title }}">
+        <img class="post-image" src="{{ media.image.url }}" alt="{{ post.title }}">
         <div class="post-content">
             <p> {{ post.content }} </p>
         </div>
         
         <div class="post-media">
             <h2>Related Media</h2>
-            <img src="{{ post.upload.url }}"></img>
+                <img src="{{ media.file.url }}" alt="{{post.title}}"></img>
         </div>
 
         <h3>Comments</h3>

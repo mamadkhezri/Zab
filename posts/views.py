@@ -4,9 +4,9 @@ from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
-from .models import Post, Comment, vote
+from .models import Post, Comment, vote, Media
 from django.http import JsonResponse
-from .forms import PostUpdateForm, PostCreateForm, CommentCreateForm, CommentReplyForm 
+from .forms import PostUpdateCreateForm , CommentCreateForm, CommentReplyForm , MediaFormSet
 from django.utils.text import slugify
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -92,7 +92,7 @@ class PostUpdateView(LoginRequiredMixin, View):
     def get(self, request, post_id):
         post = self.post_instance
         if post.author.id == request.user.id:
-            form = PostUpdateForm(instance=post)
+            form = PostUpdateCreateForm(instance=post)
             return render(request, 'posts/update.html', {'form': form, 'post': post})
         else:
             messages.error(request, 'You cannot update this post.', 'danger')
@@ -101,7 +101,7 @@ class PostUpdateView(LoginRequiredMixin, View):
     def post(self, request, post_id):
         post = self.post_instance
         if post.author.id == request.user.id:
-            form = PostUpdateForm(request.POST, request.FILES, instance=post)
+            form = PostUpdateCreateForm(request.POST, request.FILES, instance=post)
             if form.is_valid():
                 post.title = form.cleaned_data['title']
                 post.slug = slugify(post.title)
@@ -118,14 +118,16 @@ class PostUpdateView(LoginRequiredMixin, View):
 
 
 class PostcreateView(LoginRequiredMixin, View):
-    form_class = PostCreateForm
+    form_class = PostUpdateCreateForm
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        return render(request, 'posts/create.html', {'form': form})
+        media_formset = MediaFormSet(queryset=Media.objects.none())
+        return render(request, 'posts/create.html', {'form': form, 'media_formset': media_formset})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
+        media_formset = MediaFormSet(request.POST, request.FILES, queryset=Media.objects.none())
         if form.is_valid():
             new_post = form.save(commit=False)
             new_post.slug = slugify(form.cleaned_data['title'][:30])
@@ -133,7 +135,8 @@ class PostcreateView(LoginRequiredMixin, View):
             new_post.save()
             messages.success(request, 'You created a new post', 'success')
             return redirect('posts:post_detail', new_post.id, new_post.slug)
-        return render(request, 'posts/create.html', {'form': form})
+
+        return render(request, 'posts/create.html', {'form': form, 'media_formset': media_formset})
     
 
 class PostAddReplyView(LoginRequiredMixin, View):

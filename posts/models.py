@@ -5,13 +5,16 @@ from django.utils.text import slugify
 
 # Create your models here.
 
+class Media(models.Model):
+    post = models.ForeignKey('Post' , on_delete=models.CASCADE, related_name='media_item' )
+    image = models.ImageField(upload_to='blog/')
+    file = models.FileField(upload_to='media/blog/')
+    media_type = models.CharField(choices=[('image', 'Image'), ('video', 'Video')], max_length=10)
 
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='blog/')
     title = models.CharField(max_length=255)
     content = models.TextField()
-    upload = models.FileField(upload_to='media/blog/')
     #tags = 
     #category = models.ManyToManyField(Category)
     counted_views = models.IntegerField(default=0)
@@ -21,6 +24,7 @@ class Post(models.Model):
     published_date = models.DateTimeField(null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+    media = models.ManyToManyField(Media, related_name='posts_media')
 
     class Meta:
          ordering = ['-created_date', '-counted_views']
@@ -37,7 +41,9 @@ class Post(models.Model):
     
     def user_can_like(self, user):
         return user.uvotes.filter(post=self).exists()
+    
 
+    
 
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_comments')
