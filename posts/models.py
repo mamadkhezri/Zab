@@ -5,18 +5,15 @@ from django.utils.text import slugify
 
 # Create your models here.
 
-class Media(models.Model):
-    post = models.ForeignKey('Post' , on_delete=models.CASCADE, related_name='media_item' )
-    image = models.ImageField(upload_to='blog/')
-    file = models.FileField(upload_to='media/blog/')
-    media_type = models.CharField(choices=[('image', 'Image'), ('video', 'Video')], max_length=10)
 
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    poster = models.ImageField(upload_to='blog/', null=True, blank=True)
     title = models.CharField(max_length=255)
     content = models.TextField()
     #tags = 
     #category = models.ManyToManyField(Category)
+    file = models.FileField(upload_to='media/blog/', null=True, blank=True)
     counted_views = models.IntegerField(default=0)
     status = models.BooleanField(default=False)
     slug = models.SlugField()
@@ -24,7 +21,6 @@ class Post(models.Model):
     published_date = models.DateTimeField(null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    media = models.ManyToManyField(Media, related_name='posts_media')
 
     class Meta:
          ordering = ['-created_date', '-counted_views']

@@ -4,9 +4,9 @@ from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
-from .models import Post, Comment, vote, Media
+from .models import Post, Comment, vote 
 from django.http import JsonResponse
-from .forms import PostUpdateCreateForm , CommentCreateForm, CommentReplyForm , MediaFormSet
+from .forms import PostUpdateCreateForm , CommentCreateForm, CommentReplyForm
 from django.utils.text import slugify
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -122,12 +122,10 @@ class PostcreateView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        media_formset = MediaFormSet(queryset=Media.objects.none())
-        return render(request, 'posts/create.html', {'form': form, 'media_formset': media_formset})
+        return render(request, 'posts/create.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
-        media_formset = MediaFormSet(request.POST, request.FILES, queryset=Media.objects.none())
         if form.is_valid():
             new_post = form.save(commit=False)
             new_post.slug = slugify(form.cleaned_data['title'][:30])
@@ -135,8 +133,7 @@ class PostcreateView(LoginRequiredMixin, View):
             new_post.save()
             messages.success(request, 'You created a new post', 'success')
             return redirect('posts:post_detail', new_post.id, new_post.slug)
-
-        return render(request, 'posts/create.html', {'form': form, 'media_formset': media_formset})
+        return render(request, 'posts/create.html', {'form': form})
     
 
 class PostAddReplyView(LoginRequiredMixin, View):

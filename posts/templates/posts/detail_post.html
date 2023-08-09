@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,6 +50,12 @@
             text-align: right;
             margin-bottom: 20px;
         }
+
+        a{
+            text-decoration: none;
+
+        }
+
     </style>
 </head>
 <body>
@@ -58,30 +63,31 @@
     <div class="post">
         <div class="post-buttons">
             {% if post.author == request.user %}
-                <a href="{% url 'posts:post_delete' post.id %}"><button>Delete Post</button></a>
-                <a href="{% url 'posts:post_update' post.id %}"><button>Update Post</button></a>
+                <a href="{% url 'posts:post_delete' post.id %}"><button class="btn btn-outline-dark mt-3">Delete Post</button></a>
+                <a href="{% url 'posts:post_update' post.id %}"><button class="btn btn-outline-dark mt-3">Update Post</button></a>
             {% endif %}
             
         </div>
         {% if user.is_authenticated %}
             <a href="{% url 'posts:post_like' post.id %}" class="{% if can_like %}disabled{% endif %} btn btn-primary col-md-2">Like {{ likes_count }}</a>
-            <a href="{% url 'posts:post_unlike' post.id %}" class="btn btn-danger col-md-2">Unlike {{ unlikes_count  }}</a>
+            <a href="{% url 'posts:post_unlike' post.id %}" class="btn btn-danger col-md-2">Unlike</a>
         {% endif %}
 
         <div class="post-metadata">
             <span class="post-view-count"> Views: {{post.counted_views}} </span>
-            <a href="{% url 'accounts:user_profile' post.author.id  %}"><span class="post-author">Author:{{post.author}} </span></a>
+
+            <a href="{% url 'accounts:user_profile' post.author.id  %}">Author: <span class="post-author fw-bold ">{{post.author}} </span></a>
         </div>
         
         <h1 class="post-title"> {{ post.title }} </h1>
-        <img class="post-image" src="{{ media.image.url }}" alt="{{ post.title }}">
+        <img class="post-image" src="{{ post.poster.url }}" alt="{{ post.title }}">
         <div class="post-content">
             <p> {{ post.content }} </p>
         </div>
         
         <div class="post-media">
             <h2>Related Media</h2>
-                <img src="{{ media.file.url }}" alt="{{post.title}}"></img>
+            <img src="{{ post.file.url }}" alt="{{post.title}}"></img>
         </div>
 
         <h3>Comments</h3>

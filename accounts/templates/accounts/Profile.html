@@ -90,22 +90,28 @@
             </div>
           </div>
         </div>
-    
         <div class="col-md-9">
           <!-- User's Uploaded Posts -->
           <div class="bg-white shadow rounded-lg">
             <div class="p-4">
               <h3 class="mb-4">Your Uploaded Posts</h3>
               <!-- Loop through and display the user's uploaded posts -->
-              <div class="card mb-3">
-                <div class="card-body">
-                  <p>First uploaded post content goes here.</p>
+              <div class="row">
+                {% for post in posts %}
+                <div class="col-md-6 mb-3">
+                  <div class="card">
+                    <img src="{{ post.poster.url }}" class="card-img-top" alt="{{post.title}}">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ post.title }}</h5><hr>
+                      <p class="card-text">{{ post.content|truncatewords:30 }}</p>
+                      <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read More</a>
+                    </div>
+                  </div>
                 </div>
+                {% endfor %}
               </div>
-              <!-- Add more posts as needed -->
             </div>
           </div>
-          <!-- Two Posts - Follower and Unfollowed -->
         </div>
       </div>
     </div>
