@@ -3,9 +3,6 @@ from .models import Post, Comment
 from multiupload.fields import MultiFileField
 
 
-
-
-
 class PostUpdateCreateForm(forms.ModelForm):
 	class Meta:
 		model = Post

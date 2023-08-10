@@ -59,7 +59,6 @@
     </style>
 </head>
 <body>
-
     <div class="post">
         <div class="post-buttons">
             {% if post.author == request.user %}
@@ -73,8 +72,8 @@
             <a href="{% url 'posts:post_unlike' post.id %}" class="btn btn-danger col-md-2">Unlike</a>
         {% endif %}
 
-        <div class="post-metadata">
-            <span class="post-view-count"> Views: {{post.counted_views}} </span>
+        <div class="post-metadata mt-3">
+            <span class="post-view-count fw-bold"> Views: {{post.counted_views}} </span>
 
             <a href="{% url 'accounts:user_profile' post.author.id  %}">Author: <span class="post-author fw-bold ">{{post.author}} </span></a>
         </div>
@@ -87,7 +86,11 @@
         
         <div class="post-media">
             <h2>Related Media</h2>
-            <img src="{{ post.file.url }}" alt="{{post.title}}"></img>
+            {% if post.file %}
+                <img src="{{ post.file.url }}" alt="{{ post.title }}">
+            {% else %}
+                No related media available.
+            {% endif %}
         </div>
 
         <h3>Comments</h3>
