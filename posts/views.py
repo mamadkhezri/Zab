@@ -4,15 +4,14 @@ from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
-from .models import Post, Comment, vote 
+from .models import Post, Comment, vote , Image, Audio, Video
 from django.http import JsonResponse
 from .forms import PostUpdateCreateForm , CommentCreateForm, CommentReplyForm
 from django.utils.text import slugify
+from django.template.defaultfilters import slugify
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-
-# Create your views here.
 
 
 class PostDetailView(View):
@@ -126,15 +125,28 @@ class PostcreateView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
+
         if form.is_valid():
             new_post = form.save(commit=False)
             new_post.slug = slugify(form.cleaned_data['title'][:30])
             new_post.author = request.user
             new_post.save()
+
+            image_files = request.FILES.getlist('image')  # Retrieve a list of uploaded image files
+            video_files = request.FILES.getlist('video')  # Retrieve a list of uploaded video files
+            audio_files = request.FILES.getlist('audio')  # Retrieve a list of uploaded audio files
+
+            for image_file in image_files:
+                Image.objects.create(post=new_post, image=image_file)
+            for video_file in video_files:
+                Video.objects.create(post=new_post, video=video_file)
+            for audio_file in audio_files:
+                Audio.objects.create(post=new_post, audio=audio_file)
+
             messages.success(request, 'You created a new post', 'success')
             return redirect('posts:post_detail', new_post.id, new_post.slug)
+
         return render(request, 'posts/create.html', {'form': form})
-    
 
 class PostAddReplyView(LoginRequiredMixin, View):
     form_class = CommentReplyForm

@@ -3,17 +3,27 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.text import slugify
 
-# Create your models here.
+class Image (models.Model):
+    image = models.ImageField(upload_to='blog/')
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='image_files')
 
+class Video(models.Model):
+    video = models.FileField(upload_to='media/blog/',null=True, blank=True)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE , related_name='videos_files')
+
+class Audio(models.Model):
+    audio = models.FileField(upload_to='media/blog/', null=True, blank=True)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE , related_name='audios_files')
 
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    poster = models.ImageField(upload_to='blog/', null=True, blank=True)
     title = models.CharField(max_length=255)
     content = models.TextField()
     #tags = 
     #category = models.ManyToManyField(Category)
-    file = models.FileField(upload_to='media/blog/', null=True, blank=True)
+    file = models.ManyToManyField(Image, related_name='associated_posts') 
+    videos = models.ManyToManyField(Video, related_name='associated_posts')
+    audios = models.ManyToManyField(Audio, related_name='associated_posts')
     counted_views = models.IntegerField(default=0)
     status = models.BooleanField(default=False)
     slug = models.SlugField()

@@ -4,7 +4,9 @@
     <form method="post" action="{% url 'posts:post_create'%}"  enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        {{ media_formset.as_table }}
+        <input type="file" name="images" accept="image/*" multiple>
+        <input type="file" name="videos" accept="video/*" multiple>
+        <input type="file" name="audios" accept="audio/*" multiple>
         <input type="submit" value="Create post">
     </form>
 {% endblock %}
