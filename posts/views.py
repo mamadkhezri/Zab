@@ -136,12 +136,15 @@ class PostcreateView(LoginRequiredMixin, View):
             video_files = request.FILES.getlist('video')  # Retrieve a list of uploaded video files
             audio_files = request.FILES.getlist('audio')  # Retrieve a list of uploaded audio files
 
-            for image_file in image_files:
-                Image.objects.create(post=new_post, image=image_file)
-            for video_file in video_files:
-                Video.objects.create(post=new_post, video=video_file)
-            for audio_file in audio_files:
-                Audio.objects.create(post=new_post, audio=audio_file)
+            try:
+                for image_file in image_files:
+                    Image.objects.create(post=new_post, image=image_file)
+                for video_file in video_files:
+                    Video.objects.create(post=new_post, video=video_file)
+                for audio_file in audio_files:
+                    Audio.objects.create(post=new_post, audio=audio_file)
+            except Exception as e:
+                print("Error during file creation:", e)
 
             messages.success(request, 'You created a new post', 'success')
             return redirect('posts:post_detail', new_post.id, new_post.slug)

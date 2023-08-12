@@ -8,11 +8,11 @@ class Image (models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='image_files')
 
 class Video(models.Model):
-    video = models.FileField(upload_to='media/blog/',null=True, blank=True)
+    video = models.FileField(upload_to='blog/',null=True, blank=True)
     post = models.ForeignKey('Post', on_delete=models.CASCADE , related_name='videos_files')
 
 class Audio(models.Model):
-    audio = models.FileField(upload_to='media/blog/', null=True, blank=True)
+    audio = models.FileField(upload_to='blog/', null=True, blank=True)
     post = models.ForeignKey('Post', on_delete=models.CASCADE , related_name='audios_files')
 
 class Post(models.Model):
@@ -21,7 +21,7 @@ class Post(models.Model):
     content = models.TextField()
     #tags = 
     #category = models.ManyToManyField(Category)
-    file = models.ManyToManyField(Image, related_name='associated_posts') 
+    file = models.ManyToManyField(Image, related_name='associated_posts', blank=True) 
     videos = models.ManyToManyField(Video, related_name='associated_posts')
     audios = models.ManyToManyField(Audio, related_name='associated_posts')
     counted_views = models.IntegerField(default=0)
