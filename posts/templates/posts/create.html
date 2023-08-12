@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form method="post" action="{% url 'posts:post_create'%}"  enctype="multipart/form-data">
+    <form method="post" action="{% url 'posts:post_create'%}" enctype="multipart/form-data" >
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="file" name="images" accept="image/*" multiple>
-        <input type="file" name="videos" accept="video/*" multiple>
-        <input type="file" name="audios" accept="audio/*" multiple>
+        <input type="file" name="image">
+        <input type="file" name="video">
+        <input type="file" name="audio">
         <input type="submit" value="Create post">
     </form>
 {% endblock %}

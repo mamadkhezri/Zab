@@ -77,21 +77,40 @@
 
             <a href="{% url 'accounts:user_profile' post.author.id  %}">Author: <span class="post-author fw-bold ">{{post.author}} </span></a>
         </div>
-        
-        <h1 class="post-title"> {{ post.title }} </h1>
-        <img class="post-image" src="{{ image.image.url }}" alt="{{ post.title }}">
-        <div class="post-content">
-            <p> {{ post.content }} </p>
-        </div>
-        
-        <div class="post-media">
-            <h2>Related Media</h2>
-            {% if post.file %}
-                <img src="{{ post.file.url }}" alt="{{ post.title }}">
-            {% else %}
-                No related media available.
-            {% endif %}
-        </div>
+          <!-- Include Bootstrap JS (Optional) -->
+          <h1 class="post-title">{{ post.title }}</h1>
+
+          <div class="post-images">
+              {% for image_file in post.image_files.all %}
+                  <img class="post-image" src="{{ image_file.image.url }}" alt="{{ post.title }}">
+              {% endfor %}
+          </div>
+          
+          <div class="post-content">
+              <p>{{ post.content }}</p>
+          </div>
+          
+          <div class="post-media">
+              <h2>Related Media</h2>
+              <div class="post-videos">
+                  {% for video_file in post.videos_files.all %}
+                      <video controls>
+                          <source src="{{ video_file.video.url }}" type="video/mp4">
+                          Your browser does not support the video tag.
+                      </video>
+                  {% endfor %}
+              </div>
+              
+              <div class="post-audios">
+                  {% for audio_file in post.audios_files.all %}
+                      <audio controls>
+                          <source src="{{ audio_file.audio.url }}" type="audio/mpeg">
+                          Your browser does not support the audio tag.
+                      </audio>
+                  {% endfor %}
+              </div>
+          </div>
+          <!-- Include Bootstrap JS (Optional) -->
 
         <h3>Comments</h3>
 <div class="list-group">

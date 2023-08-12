@@ -124,7 +124,7 @@ class PostcreateView(LoginRequiredMixin, View):
         return render(request, 'posts/create.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST, request.FILES)
+        form = self.form_class(request.POST)
 
         if form.is_valid():
             new_post = form.save(commit=False)

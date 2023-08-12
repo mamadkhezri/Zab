@@ -29,7 +29,7 @@
       {% endif %}
         <div class="col-lg-4 col-md-6">
           <div class="card mb-4">
-            <img src="{{ image.image.url }}" class="card-img-top" alt="{{post.title}}">
+            <img src="{{  post.image_files.first.image.url }}" class="card-img-top" alt="{{post.title}}">
             <div class="card-body">
               <h5 class="card-title">{{ post.title }}</h5>
             <p class="card-text">{{ post.content|truncatewords:8}}</p>
