@@ -112,6 +112,14 @@
           </div>
           <!-- Include Bootstrap JS (Optional) -->
 
+          {% include 'posts/tagged_posts.html' %}
+          <h3>Tags:</h3>
+          <ul>
+              {% for tag in tags %}
+                  <li><a href="{% url 'posts:tagged_posts' tag_slug=tag.slug %}"> {{ tag }} </a></li>
+              {% endfor %}
+          </ul>
+
         <h3>Comments</h3>
 <div class="list-group">
     {% for comment in comments %}

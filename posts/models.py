@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from taggit.managers import TaggableManager
 from django.urls import reverse
 from django.utils.text import slugify
 
@@ -19,11 +20,10 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = models.TextField()
-    #tags = 
-    #category = models.ManyToManyField(Category)
+    tags = TaggableManager()
     file = models.ManyToManyField(Image, related_name='associated_posts', blank=True) 
-    videos = models.ManyToManyField(Video, related_name='associated_posts')
-    audios = models.ManyToManyField(Audio, related_name='associated_posts')
+    videos = models.ManyToManyField(Video, related_name='associated_posts', blank=True)
+    audios = models.ManyToManyField(Audio, related_name='associated_posts', blank=True)
     counted_views = models.IntegerField(default=0)
     status = models.BooleanField(default=False)
     slug = models.SlugField()

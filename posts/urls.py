@@ -12,5 +12,6 @@ urlpatterns = [
     path('reply/<int:post_id>/<int:comment_id>/', views.PostAddReplyView.as_view(), name='add_reply'),
     path('like/<int:post_id>/', views.LikePostView.as_view(), name='post_like'),
     path('unlike/<int:post_id>/', views.UnlikePostView.as_view(), name='post_unlike'),
+    path('tag/<slug:tag_slug>/', views.TaggedPostsView.as_view(), name='tagged_posts'),
 
 ]

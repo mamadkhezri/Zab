@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'home.apps.HomeConfig',
     'posts.apps.PostsConfig',
-    'multiupload'
+    'multiupload',
+    'taggit',
 ]
 
 MIDDLEWARE = [

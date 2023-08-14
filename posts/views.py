@@ -7,6 +7,7 @@ from django.contrib import messages
 from .models import Post, Comment, vote , Image, Audio, Video
 from django.http import JsonResponse
 from .forms import PostUpdateCreateForm , CommentCreateForm, CommentReplyForm
+from taggit.models import Tag
 from django.utils.text import slugify
 from django.template.defaultfilters import slugify
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -33,6 +34,7 @@ class PostDetailView(View):
         reply_form = self.form_class_reply()
 
         likes_count = vote.objects.filter(post=post_instance).count()
+        tags = post_instance.tags.all()
 
         return render(request, 'posts/detail_post.html', {
             'post': post_instance,
@@ -42,6 +44,7 @@ class PostDetailView(View):
             'can_like': can_like,
             'can_unlike': can_unlike,
             'likes_count': likes_count,
+            'tags': tags,
         })
 
     @method_decorator(login_required)
@@ -188,7 +191,14 @@ class UnlikePostView(LoginRequiredMixin, View):
             self.unlike_post(request, post)
             return redirect('posts:post_detail', post_id=post_id, post_slug=post.slug)
         return redirect('posts:post_detail', post_id=post_id, post_slug=post.slug)
+    
+class TaggedPostsView(View):
+    template_name = 'posts/tagged_posts.html'
 
+    def get(self, request, tag_slug):
+        tag = Tag.objects.get(slug=tag_slug)  # Retrieve the tag object
+        tagged_posts = Post.objects.filter(tags=tag)  # Filter posts by the tag
+        return render(request, self.template_name, {'tagged_posts': tagged_posts})
 
 
     
