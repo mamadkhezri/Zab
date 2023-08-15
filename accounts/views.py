@@ -137,6 +137,28 @@ class EditUserView(LoginRequiredMixin, View):
             request.user.save()
             messages.success(request, 'edit profile successfully', extra_tags='success')
         return redirect('accounts:user_profile', request.user.id)
+
+
+  
+class UserPasswordResetView(auth_views.PasswordResetView):
+	template_name = 'accounts/password_reset_form.html'
+	success_url = reverse_lazy('accounts:password_reset_done')
+	email_template_name = 'accounts/password_reset_email.html'
+
+
+class UserPasswordResetDoneView(auth_views.PasswordResetDoneView):
+	template_name = 'accounts/password_reset_done.html'
+
+
+class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+	template_name = 'accounts/password_reset_confirm.html'
+	success_url = reverse_lazy('accounts:password_reset_complete')
+
+
+class UserPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
+	template_name = 'accounts/password_reset_complete.html'
+
+
         
 
  

@@ -144,3 +144,14 @@ AUTHENTICATION_BACKENDS = [
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+
+# Google account for reset password
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'airplanepictures2@gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_PASSWORD = 'ujpfztbzkcxdphdb'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Zab'
