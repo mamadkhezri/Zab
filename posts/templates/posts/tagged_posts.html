@@ -3,25 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <title>Document</title>
 </head>
 <body>
-    <h5>Tagged Posts</h5>
+    {% include 'inc/navbar.html' %}
+    <h5 class="text-center mt-3">Posts related to your selected tag</h5>
 
-    <ul>
+    <div class="row">
         {% for post in tagged_posts %}
-            <li>
-                <h2><a href="{% url 'posts:post_detail' post_id=post.pk post_slug=post.slug %}">{{ post.title }}</a></h2>
-                <p>{{ post.content }}</p>
-                <h3>Tags:</h3>
-                <ul>
-                    {% for tag in post.tags.all %}
-                        <li><a href="{% url 'posts:tagged_posts' tag_slug=tag.slug %}">{{ tag }}</a></li>
-                    {% endfor %}
-                </ul>
-            </li>
+            <div class="col-lg-4 col-md-6">
+                <div class="card mb-4">
+                    <img src="{{ post.image_files.first.image.url }}" class="card-img-top" alt="{{ post.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</a></h5>
+                        <p class="card-text">{{ post.content|truncatewords:8 }}</p>
+                        <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read More</a>
+                    </div>
+                </div>
+            </div>
+            {% if forloop.counter|divisibleby:3 or forloop.last %}
+                </div>
+                {% if not forloop.last %}
+                    <div class="row">
+                {% endif %}
+            {% endif %}
         {% endfor %}
-    </ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 
 </body>
 </html>
