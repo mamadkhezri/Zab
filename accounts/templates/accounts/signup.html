@@ -6,6 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.0-beta3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'css\signup.css' %}" >
   <title>Register</title>
 </head>
 <body>
@@ -13,8 +14,8 @@
     <div class="row justify-content-center">
       <div class="col-md-6 mt-5">
         <div class="card">
-          <div class="card-header">
-            <h3 class="text-center">Create an Account</h3>
+          <div class="card-header rounded-3">
+            <h3 class="text-center" >Create an Account</h3>
           </div>
           <div class="card-body">
             <form action="{% url 'accounts:user_register' %}" method="post">
@@ -22,12 +23,12 @@
                 {{form.as_p}}
                </div>
               <div class="d-grid">
-                <button type="submit" act class="btn btn-primary">Sign Up</button>
+                <button type="submit" act class="btn btn-primary rounded-3 ">Sign Up</button>
               </div>
             </form>
           </div>
-          <div class="card-footer text-center">
-            <p>Already have an account? <a href="{% url 'accounts:user_login'%}">Log In</a></p>
+          <div class="card-footer text-center rounded-3 ">
+            <p class="text">Already have an account? <a href="{% url 'accounts:user_login'%}">Log In</a></p>
           </div>
         </div>
       </div>
