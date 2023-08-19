@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 class Image (models.Model):
-    image = models.ImageField(upload_to='blog/')
+    image = models.ImageField(upload_to='blog/', null=True,blank=True, default='static/img/defult.jpg')
     post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='image_files')
 
 class Video(models.Model):

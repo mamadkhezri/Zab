@@ -13,7 +13,7 @@ class Relation(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='blog/', null=True, blank=True)
+    image = models.ImageField(upload_to='blog/', null=True, blank=True, default='static/img/defult.jpg')
     first_name = models.CharField(max_length=100, null=True, blank=True)
     family_name = models.CharField(max_length=100, null=True, blank=True)
     age = models.PositiveSmallIntegerField(null=True, blank=True, validators=[

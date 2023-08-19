@@ -49,7 +49,7 @@
               {% else %}
                 <!-- Display a default photo or a message when 'image' is not set -->
                 <img
-                  src="{% static 'img/default_profile.jpg' %}"
+                  src="{% static 'img/defult.jpg' %}"
                   alt="Default Profile Photo"
                   class="img-thumbnail"
                 />
@@ -100,7 +100,7 @@
                 {% for post in posts %}
                 <div class="col-md-6 mb-3">
                   <div class="card">
-                    <img src="{{ post.poster.url }}" class="card-img-top" alt="{{post.title}}">
+                    <img src="{{ post.image_files.first.image.url }}" class="card-img-top" alt="{{post.titlee}}">
                     <div class="card-body">
                       <h5 class="card-title">{{ post.title }}</h5><hr>
                       <p class="card-text">{{ post.content|truncatewords:30 }}</p>
