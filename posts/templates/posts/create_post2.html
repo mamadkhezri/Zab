@@ -28,26 +28,27 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">Create a New Post</h4>
-          <form enctype="multipart/form-data" >
+          <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
             <div class="mb-3">
-              <label for="photos" class="form-label">Upload Photos and Videos</label>
-              <input type="file" class="form-control" id="photos" name="photos[]" multiple accept="image/*, video/*">
+                <label for="photos" class="form-label">Upload Photos and Videos</label>
+                {{ form.image }}
             </div>
             <div class="mb-3">
-              <label for="title" class="form-label">Title</label>
-              <input type="text" class="form-control" id="title" placeholder="Enter title">
+                <label for="title" class="form-label">Title</label>
+                {{ form.title }}
             </div>
             <div class="mb-3">
-              <label for="text" class="form-label">Text</label>
-              <textarea class="form-control" id="text" rows="4" placeholder="Enter text"></textarea>
+                <label for="text" class="form-label">Text</label>
+                {{ form.text }}
             </div>
             <div class="mb-3">
-              <label for="tags" class="form-label">Tags</label>
-              <input type="text" class="form-control" id="tags" placeholder="Enter tags">
-              <small class="form-text text-muted">Separate tags with commas.</small>
+                <label for="tags" class="form-label">Tags</label>
+                {{ form.tags }}
+                <small class="form-text text-muted">Separate tags with commas.</small>
             </div>
             <button type="submit" class="btn btn-primary">Create Post</button>
-          </form>
+        </form>
         </div>
       </div>
     </div>
