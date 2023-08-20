@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,40 +22,31 @@
   </style>
 </head>
 <body>
-
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">Create a New Post</h4>
-          <form enctype="multipart/form-data" action="{% url 'posts:post_create'%}" method="post">
-            {% csrf_token %}
-            
+          <form enctype="multipart/form-data" >
             <div class="mb-3">
-              <label for="{{ form.photos.id_for_label }}" class="form-label">Upload Photos and Videos</label>
-              <input type="file" class="form-control" id="{{ form.photos.id_for_label }}" name="{{ form.photos.name }}" multiple accept="image/*, video/*">
+              <label for="photos" class="form-label">Upload Photos and Videos</label>
+              <input type="file" class="form-control" id="photos" name="photos[]" multiple accept="image/*, video/*">
             </div>
-            
             <div class="mb-3">
-              <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
-              <input type="text" class="form-control" id="{{ form.title.id_for_label }}" name="{{ form.title.name }}" placeholder="Enter title">
+              <label for="title" class="form-label">Title</label>
+              <input type="text" class="form-control" id="title" placeholder="Enter title">
             </div>
-            
             <div class="mb-3">
-              <label for="{{ form.text.id_for_label }}" class="form-label">Text</label>
-              <textarea class="form-control" id="{{ form.text.id_for_label }}" name="{{ form.text.name }}" rows="4" placeholder="Enter text"></textarea>
+              <label for="text" class="form-label">Text</label>
+              <textarea class="form-control" id="text" rows="4" placeholder="Enter text"></textarea>
             </div>
-            
             <div class="mb-3">
-              <label for="{{ form.tags.id_for_label }}" class="form-label">Tags</label>
-              <input type="text" class="form-control" id="{{ form.tags.id_for_label }}" name="{{ form.tags.name }}" placeholder="Enter tags">
+              <label for="tags" class="form-label">Tags</label>
+              <input type="text" class="form-control" id="tags" placeholder="Enter tags">
               <small class="form-text text-muted">Separate tags with commas.</small>
             </div>
-            
             <button type="submit" class="btn btn-primary">Create Post</button>
-          </form>
-          
           </form>
         </div>
       </div>

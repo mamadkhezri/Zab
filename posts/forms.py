@@ -12,7 +12,7 @@ class PostUpdateCreateForm(forms.ModelForm):
     
     class Meta:
         model = Post
-        fields = ('image', 'video', 'audio', 'title', 'content')
+        fields = ('image', 'video', 'audio', 'title', 'content', 'tags')
 
     def save(self, commit=True):
         post = super().save(commit=commit)
