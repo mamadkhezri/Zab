@@ -114,9 +114,10 @@
 
           <h5>Tags:</h5>
           <ul>
-              {% for tag in tags %}
-                  <li><a href="{% url 'posts:tagged_posts' tag_slug=tag.slug %}"> {{ tag }} </a></li>
-              {% endfor %}
+            {% for tag in tags %}
+                <li><a href="{% url 'posts:tagged_posts' tag_slug=tag.slug %}"> {{ tag }} </a></li>
+            {% endfor %}
+              
           </ul>
 
         <h3>Comments</h3>
