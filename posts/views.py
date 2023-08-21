@@ -69,6 +69,7 @@ class PostDetailView(View):
             'comments': comments,
             'form': form,
             'reply_form': reply_form,
+            
         })
 
 
@@ -124,7 +125,8 @@ class PostcreateView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        return render(request, 'posts/create_post2.html', {'form': form})
+        tags = Tag.objects.all()
+        return render(request, 'posts/create_post2.html', {'form': form, 'tags': tags})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -149,10 +151,12 @@ class PostcreateView(LoginRequiredMixin, View):
             except Exception as e:
                 print("Error during file creation:", e)
 
+            form.save_m2m()
+
             messages.success(request, 'You created a new post', 'success')
             return redirect('posts:post_detail', new_post.id, new_post.slug)
 
-        return render(request, 'posts/create_post2.html', {'form': form})
+        return render(request, 'posts/create_post2.html', {'form': form, 'tags': Tag.objects.all()})
 
 class PostAddReplyView(LoginRequiredMixin, View):
     form_class = CommentReplyForm
