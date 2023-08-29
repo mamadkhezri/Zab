@@ -30,16 +30,20 @@ class UserRegisterView(View):
     def get(self, request):
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
+    
 
     def post(self, request):
         form = self.form_class(request.POST)
         if form.is_valid():
-            cd = form.cleaned_data
-            User.objects.create_user(
-                cd['username'], cd['email'], cd['password1'])
-            messages.success(request, 'you registered successfully', 'success')
-            return redirect('home:home')
-        return render(request, self.template_name, {'form': form})
+            request.session['user_registration_info'] = {
+				'phone_number': form.cleaned_data['phone'],
+				'email': form.cleaned_data['email'],
+				'username': form.cleaned_data['username'],
+				'password': form.cleaned_data['password'],
+			}
+        return render(request, self.template_name, {'form':form})
+		    
+
 
 
 class UserLoginView(View):

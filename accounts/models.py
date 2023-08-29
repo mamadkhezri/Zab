@@ -1,6 +1,47 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
+from .managers import UserManager
+
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=30, unique=True)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    profile_picture = models.ImageField(upload_to="profile_pictures/", blank=True, null=True)
+    bio = models.TextField(blank=True)
+    location = models.CharField(max_length=100, blank=True)
+    date_of_birth = models.DateField(blank=True, null=True)
+    gender = models.CharField(max_length=10, choices=[("male", "Male"), ("female", "Female"), ("other", "Other")], blank=True)
+    date_joined = models.DateTimeField(default=timezone.now)
+    phone_number = models.CharField(max_length=15, unique=True)
+    friends = models.ManyToManyField('self', symmetrical=True, related_name='user_friends')
+    followers = models.ManyToManyField('self', related_name='user_followers')
+    posts = models.ManyToManyField('Post', related_name='author')
+    liked_posts = models.ManyToManyField('Post', through='PostLike', related_name='liked_by')
+    messages = models.ManyToManyField('Message', related_name='participants')
+    blocked_users = models.ManyToManyField('self', related_name='user_blocked_users')
+    website = models.URLField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'phone_number'
+    REQUIRED_FIELDS = ['email', 'last_name']
+
+    def __str__(self):
+        return self.email
+
+    @property
+    def is_staff(self):
+        return self.is_admin
+
+
 
 class Relation(models.Model):
     from_author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')

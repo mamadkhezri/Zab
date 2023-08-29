@@ -1,0 +1,54 @@
+﻿[
+    {
+        "model": "admin.logentry",
+        "pk": 1,
+        "fields": {
+            "action_time": "2023-07-06T21:41:44.215Z",
+            "user": 1,
+            "content_type": 4,
+            "object_id": "2",
+            "object_repr": "nazdar",
+            "action_flag": 3,
+            "change_message": ""
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 2,
+        "fields": {
+            "action_time": "2023-07-06T21:41:48.518Z",
+            "user": 1,
+            "content_type": 4,
+            "object_id": "4",
+            "object_repr": "mohammad",
+            "action_flag": 3,
+            "change_message": ""
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 3,
+        "fields": {
+            "action_time": "2023-07-06T21:41:52.590Z",
+            "user": 1,
+            "content_type": 4,
+            "object_id": "3",
+            "object_repr": "mamd",
+            "action_flag": 3,
+            "change_message": ""
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 44,
+        "fields": {
+            "action_time": "2023-07-20T22:46:10.648Z",
+            "user": 1,
+            "content_type": 8,
+            "object_id": "16",
+            "object_repr": "modify for me",
+            "action_flag": 3,
+            "change_message": ""
+        }
+    }
+]
