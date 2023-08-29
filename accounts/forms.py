@@ -2,7 +2,9 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from .models import Profile
+from .models import User
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+
 
 
 class UserCreationForm(forms.ModelForm):
@@ -11,7 +13,7 @@ class UserCreationForm(forms.ModelForm):
 
 	class Meta:
 		model = User
-		fields = ('email', 'phone_number', 'full_name')
+		fields = ('email', 'phone_number', 'first_name', 'last_name')
 
 	def clean_password2(self):
 		cd = self.cleaned_data
@@ -32,7 +34,7 @@ class UserChangeForm(forms.ModelForm):
 
 	class Meta:
 		model = User
-		fields = ('email', 'phone_number','password', 'last_login')
+		fields = ('email', 'phone_number', 'first_name', 'last_name', 'profile_picture', 'bio', 'location', 'date_of_birth', 'gender', 'website', 'is_active', 'is_admin')
 
 
 class UserRegistrationForm(forms.Form):

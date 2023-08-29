@@ -1,10 +1,8 @@
 from django.contrib import admin
-from .forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import Relation, Profile
+from .models import Relation, Profile, User
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.admin import UserAdmin
-from .models import User
+from .forms import UserCreationForm, UserChangeForm
 
 class UserAdmin(BaseUserAdmin):
 	form = UserChangeForm
@@ -15,17 +13,17 @@ class UserAdmin(BaseUserAdmin):
 	readonly_fields = ('last_login',)
 
 	fieldsets = (
-		('Main', {'fields':('email', 'phone_number', 'full_name', 'password')}),
+		('Main', {'fields':('email', 'phone_number', 'first_name', 'password')}),
 		('Permissions', {'fields':('is_active', 'is_admin', 'is_superuser', 'last_login', 'groups', 'user_permissions')}),
 	)
 
 	add_fieldsets = (
-		(None, {'fields':('phone_number', 'email', 'full_name', 'password1', 'password2')}),
+		(None, {'fields':('phone_number', 'email', 'first_name','last_name', 'password1', 'password2')}),
 	)
 
-	search_fields = ('email', 'full_name')
-	ordering = ('full_name',)
-	filter_horizontal = ('groups', 'user_permissions')
+	search_fields = ('email', 'phone_number')
+	ordering = ('first_name',)
+	filter_horizontal = ()
 
 	def get_form(self, request, obj=None, **kwargs):
 		form = super().get_form(request, obj, **kwargs)
@@ -35,18 +33,20 @@ class UserAdmin(BaseUserAdmin):
 		return form
 
 
-admin.site.register(User, UserAdmin)
 
 
-class profileinline(admin.StackedInline):
+class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False
 
 class ExtendedUserAdmin(UserAdmin):
-    inlines = (profileinline,) 
+    inlines = (ProfileInline,)
 
-admin.site.register(User,ExtendedUserAdmin)
+
+admin.site.register(User, UserAdmin)
 admin.site.register(Relation)
+
+
 
 
 

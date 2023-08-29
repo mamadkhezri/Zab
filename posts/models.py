@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
 from django.urls import reverse
@@ -17,7 +18,7 @@ class Audio(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE , related_name='audios_files')
 
 class Post(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = models.TextField()
     tags = TaggableManager()
@@ -52,7 +53,7 @@ class Post(models.Model):
     
 
 class Comment(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_comments')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author_comments')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_comments')
     reply = models.ForeignKey('self', on_delete=models.CASCADE, related_name='reply_comments', blank=True, null=True)
     is_reply = models.BooleanField(default=False)
@@ -64,7 +65,7 @@ class Comment(models.Model):
 
 
 class vote(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='uvotes')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='uvotes')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='pvotes')
 
     def __str__(self):
