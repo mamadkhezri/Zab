@@ -11,13 +11,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=30, unique=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    phone_number = models.CharField(max_length=15, unique=True)
     profile_picture = models.ImageField(upload_to="profile_pictures/", blank=True, null=True)
     bio = models.TextField(blank=True)
     location = models.CharField(max_length=100, blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=10, choices=[("male", "Male"), ("female", "Female"), ("other", "Other")], blank=True)
     date_joined = models.DateTimeField(default=timezone.now)
-    phone_number = models.CharField(max_length=15, unique=True)
     friends = models.ManyToManyField('self', symmetrical=True)
     blocked_users = models.ManyToManyField('self')
     website = models.URLField(blank=True, null=True)
@@ -28,7 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = ['email', 'last_name']
+    REQUIRED_FIELDS = ['email', 'username', 'first_name', 'last_name']
 
     def __str__(self):
         return self.email
