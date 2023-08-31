@@ -14,7 +14,7 @@ class UserCreationForm(forms.ModelForm):
 
 	class Meta:
 		model = User
-		fields = ('email', 'phone_number', 'first_name', 'last_name')
+		fields = ('email', 'phone_number', 'full_name')
 
 	def clean_password2(self):
 		cd = self.cleaned_data
@@ -35,13 +35,13 @@ class UserChangeForm(forms.ModelForm):
 
 	class Meta:
 		model = User
-		fields = ('email', 'phone_number', 'first_name', 'last_name', 'profile_picture', 'bio', 'location', 'date_of_birth', 'gender', 'website', 'is_active', 'is_admin')
+		fields = ('email', 'phone_number', 'full_name', 'profile_picture', 'bio', 'location', 'date_of_birth', 'gender', 'website', 'is_active', 'is_admin')
 
 
 class UserRegistrationForm(forms.Form):
-	first_name = forms.CharField( widget=forms.TextInput(attrs={'class':'form-control'}))
-	last_name = forms.CharField( widget=forms.TextInput(attrs={'class':'form-control'}))
+	full_name = forms.CharField( widget=forms.TextInput(attrs={'class':'form-control'}))
 	username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+	phone_number =forms.CharField(label='phone number', widget=forms.NumberInput(attrs={'class':'form-control'}))
 	email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control'}))
 	password1 = forms.CharField(label='password', widget=forms.PasswordInput(attrs={'class':'form-control'}))
 	password2 = forms.CharField(label='confirm password', widget=forms.PasswordInput(attrs={'class':'form-control'}))
@@ -73,7 +73,7 @@ class EditUserForm(forms.ModelForm):
 	
 	class Meta:
 		model = Profile
-		fields = ('first_name', 'family_name', 'image', 'age', 'bio')
+		fields = ('full_name', 'image', 'age', 'bio')
 
 	def clean_age(self):
 		age = self.cleaned_data.get('age')

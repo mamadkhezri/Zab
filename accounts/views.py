@@ -1,5 +1,6 @@
 from typing import Any
 from django import http
+from .models import User,Relation
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http.response import HttpResponse
@@ -7,7 +8,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .forms import UserRegistrationForm, UserLoginForm, EditUserForm
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -15,7 +15,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from posts.models import Post
-from .models import Relation
 
 
 class UserRegisterView(View):
@@ -35,13 +34,27 @@ class UserRegisterView(View):
     def post(self, request):
         form = self.form_class(request.POST)
         if form.is_valid():
-            request.session['user_registration_info'] = {
-				'phone_number': form.cleaned_data['phone'],
-				'email': form.cleaned_data['email'],
-				'username': form.cleaned_data['username'],
-				'password': form.cleaned_data['password'],
-			}
-        return render(request, self.template_name, {'form':form})
+            user_registration_info = {
+                'phone_number': form.cleaned_data['phone_number'],
+                'email': form.cleaned_data['email'],
+                'full_name': form.cleaned_data['full_name'],
+                'username': form.cleaned_data['username'],
+                'password': form.cleaned_data['password1'],  # Use 'password1' field
+            }
+
+            # Create a new User instance using your custom user manager
+            user = User.objects.create_user(
+                email=user_registration_info['email'],
+                username=user_registration_info['username'],
+                full_name=user_registration_info['full_name'],
+                phone_number=user_registration_info['phone_number'],
+                password=user_registration_info['password']
+            )
+
+            # Redirect to user login or any other appropriate view
+            return redirect('accounts:user_login')
+
+        return render(request, self.template_name, {'form': form})
 		    
 
 
@@ -68,15 +81,14 @@ class UserLoginView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = authenticate(
-                request, username=cd['username'], password=cd['password'])
+            user = authenticate(request, username=cd['username'], password=cd['password'])
             if user is not None:
                 login(request, user)
                 if self.next:
                     return redirect(self.next)
                 return redirect(self.success_url)
             else:
-                messages.error(request, 'username or password is wrong', 'warning')
+                messages.error(request, 'Username or password is incorrect.')
         return render(request, self.template_name, {'form': form})
 
 

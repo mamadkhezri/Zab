@@ -9,8 +9,7 @@ from .managers import UserManager
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=30, unique=True)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    full_name = models.CharField(max_length=70)
     phone_number = models.CharField(max_length=15, unique=True)
     profile_picture = models.ImageField(upload_to="profile_pictures/", blank=True, null=True)
     bio = models.TextField(blank=True)
@@ -28,7 +27,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = ['email', 'username', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['email', 'username', 'full_name']
 
     def __str__(self):
         return self.email
@@ -51,8 +50,7 @@ class Relation(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='blog/', null=True, blank=True, default='static/img/defult.jpg')
-    first_name = models.CharField(max_length=100, null=True, blank=True)
-    family_name = models.CharField(max_length=100, null=True, blank=True)
+    full_name = models.CharField(max_length=100, default='The author of Zab')
     age = models.PositiveSmallIntegerField(null=True, blank=True, validators=[
         MinValueValidator(1, message='Age must be at least 1.'),
         MaxValueValidator(100, message='Age cannot exceed 100.'),
