@@ -7,7 +7,7 @@ from django.http.response import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .forms import UserRegistrationForm, UserLoginForm, EditUserForm
+from .forms import UserRegistrationForm, UserLoginForm, EditUserForm, UserPasswordResetForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -157,9 +157,10 @@ class EditUserView(LoginRequiredMixin, View):
 
   
 class UserPasswordResetView(auth_views.PasswordResetView):
-	template_name = 'accounts/input_email.html'
-	success_url = reverse_lazy('accounts:password_reset_done')
-	email_template_name = 'accounts/password_reset_email.html'
+    form_class = UserPasswordResetForm
+    template_name = 'accounts/input_email.html'
+    success_url = reverse_lazy('accounts:password_reset_done')
+    email_template_name = 'accounts/password_reset_email.html'
 
 
 class UserPasswordResetDoneView(auth_views.PasswordResetDoneView):

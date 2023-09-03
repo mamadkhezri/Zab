@@ -4,6 +4,8 @@ from .models import Profile
 from .models import User
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import PasswordResetForm
+
 
 
 
@@ -80,6 +82,11 @@ class EditUserForm(forms.ModelForm):
 		if age is not None and (age < 1 or age > 100):
 			raise forms.ValidationError("Age must be between 1 and 100.")
 		return age
+
+
+
+class UserPasswordResetForm(PasswordResetForm):
+	email = forms.EmailField(label='email address', widget=forms.TextInput(attrs={'class':'form-control'}))
 
 
 
