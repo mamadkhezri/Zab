@@ -44,6 +44,7 @@ class ExtendedUserAdmin(UserAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Relation)
+admin.site.register(Profile)
 
 
 
