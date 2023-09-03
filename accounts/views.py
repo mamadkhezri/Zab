@@ -157,7 +157,7 @@ class EditUserView(LoginRequiredMixin, View):
 
   
 class UserPasswordResetView(auth_views.PasswordResetView):
-	template_name = 'accounts/password_reset_form.html'
+	template_name = 'accounts/input_email.html'
 	success_url = reverse_lazy('accounts:password_reset_done')
 	email_template_name = 'accounts/password_reset_email.html'
 
