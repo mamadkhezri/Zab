@@ -164,7 +164,7 @@ class UserPasswordResetView(auth_views.PasswordResetView):
 
 
 class UserPasswordResetDoneView(auth_views.PasswordResetDoneView):
-	template_name = 'accounts/password_reset_done.html'
+	template_name = 'accounts/send_email_reset.html'
 
 
 class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
