@@ -40,6 +40,10 @@ body {
 
 }
 
+.login a{
+    text-decoration: none;
+}
+
 .login form input[type=submit] {
     font-size: 25px;
     margin-top: 25px;
