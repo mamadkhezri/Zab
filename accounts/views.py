@@ -7,7 +7,7 @@ from django.http.response import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .forms import UserRegistrationForm, UserLoginForm, EditUserForm, UserPasswordResetForm
+from .forms import UserRegistrationForm, UserLoginForm, EditUserForm, UserPasswordResetForm, UserEnterNewPassword
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -15,6 +15,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from posts.models import Post
+from django.contrib.auth.views import PasswordResetConfirmView
+from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
 
 
 class UserRegisterView(View):
@@ -166,9 +170,30 @@ class UserPasswordResetDoneView(auth_views.PasswordResetDoneView):
 	template_name = 'accounts/send_email_reset.html'
 
 
-class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
-	template_name = 'accounts/password_reset_confirm.html'
-	success_url = reverse_lazy('accounts:password_reset_complete')
+User = get_user_model()
+
+class UserPasswordResetConfirmView(PasswordResetConfirmView):
+    form_class = UserEnterNewPassword  # Specify the form class here
+    template_name = 'accounts/input_password_form.html'
+    success_url = reverse_lazy('accounts:password_reset_complete')
+
+    def form_valid(self, form):
+        uidb64 = self.kwargs['uidb64']
+        token = self.kwargs['token']
+        
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User.objects.get(pk=uid)
+            
+            if default_token_generator.check_token(user, token):
+                new_password = form.cleaned_data['password']
+                user.set_password(new_password)
+                user.save()
+                return redirect(self.success_url)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            pass  # Handle errors here or redirect to an error page
+        
+        return self.render_to_response(self.get_context_data(form=form, validlink=True))
 
 
 class UserPasswordResetCompleteView(auth_views.PasswordResetCompleteView):

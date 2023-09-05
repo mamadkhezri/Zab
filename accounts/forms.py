@@ -4,7 +4,7 @@ from .models import Profile
 from .models import User
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 
 
 
@@ -87,6 +87,16 @@ class EditUserForm(forms.ModelForm):
 
 class UserPasswordResetForm(PasswordResetForm):
 	email = forms.EmailField(label='email address', widget=forms.TextInput(attrs={'class':'form-control'}))
+
+class UserEnterNewPassword(SetPasswordForm):
+	password = forms.CharField(label='New password',  widget=forms.PasswordInput(attrs={'class':'form-control'}))
+	cpassword = forms.CharField(label='Confirm password',  widget=forms.PasswordInput(attrs={'class':'form-control'}))
+
+	def __init__(self, user, *args, **kwargs):
+		super(UserEnterNewPassword, self).__init__(user, *args, **kwargs)
+
+
+	
 
 
 
