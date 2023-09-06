@@ -7,7 +7,7 @@ from django.http.response import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .forms import UserRegistrationForm, UserLoginForm, EditUserForm, UserPasswordResetForm
+from .forms import UserRegistrationForm, UserLoginForm, EditUserForm, UserPasswordResetForm, CustomPasswordResetConfirmForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -171,6 +171,7 @@ class UserPasswordResetDoneView(auth_views.PasswordResetDoneView):
 
 
 class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    form_class = CustomPasswordResetConfirmForm  # Use the custom form
     template_name = 'accounts/input_password_form.html'
     success_url = reverse_lazy('accounts:password_reset_complete')
 

@@ -88,6 +88,47 @@ class EditUserForm(forms.ModelForm):
 class UserPasswordResetForm(PasswordResetForm):
 	email = forms.EmailField(label='email address', widget=forms.TextInput(attrs={'class':'form-control'}))
 
+
+class CustomPasswordResetConfirmForm(SetPasswordForm):
+    """
+    Custom form for password reset confirmation.
+    """
+    error_messages = {
+        'password_mismatch': "The two password fields didn't match.",
+    }
+
+    new_password1 = forms.CharField(
+        label="New Password",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        strip=False,
+        help_text="Enter your new password.",
+    )
+    new_password2 = forms.CharField(
+        label="Confirm New Password",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        strip=False,
+        help_text="Enter the same password as above, for verification.",
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['new_password1'].widget.attrs.update({'placeholder': 'New Password'})
+        self.fields['new_password2'].widget.attrs.update({'placeholder': 'Confirm New Password'})
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password1 = cleaned_data.get('new_password1')
+        new_password2 = cleaned_data.get('new_password2')
+
+        if new_password1 and new_password2 and new_password1 != new_password2:
+            raise forms.ValidationError(
+                self.error_messages['password_mismatch'],
+                code='password_mismatch',
+            )
+
+        return cleaned_data
+		
+
 # class UserEnterNewPassword(SetPasswordForm):
 	# password = forms.CharField(label='New password',  widget=forms.PasswordInput(attrs={'class':'form-control'}))
 	# cpassword = forms.CharField(label='Confirm password',  widget=forms.PasswordInput(attrs={'class':'form-control'}))
@@ -95,13 +136,5 @@ class UserPasswordResetForm(PasswordResetForm):
 	# def __init__(self, user, *args, **kwargs):
 		# super(UserEnterNewPassword, self).__init__(user, *args, **kwargs)
 
-
-	
-
-
-
-
-
-
-
-
+# from django import forms
+# from django.contrib.auth.forms import SetPasswordForm
