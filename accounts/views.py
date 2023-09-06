@@ -7,7 +7,7 @@ from django.http.response import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .forms import UserRegistrationForm, UserLoginForm, EditUserForm, UserPasswordResetForm, UserEnterNewPassword
+from .forms import UserRegistrationForm, UserLoginForm, EditUserForm, UserPasswordResetForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -170,32 +170,18 @@ class UserPasswordResetDoneView(auth_views.PasswordResetDoneView):
 	template_name = 'accounts/send_email_reset.html'
 
 
-User = get_user_model()
-
-class UserPasswordResetConfirmView(PasswordResetConfirmView):
-    form_class = UserEnterNewPassword  # Specify the form class here
+class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
     template_name = 'accounts/input_password_form.html'
     success_url = reverse_lazy('accounts:password_reset_complete')
 
-    def form_valid(self, form):
-        uidb64 = self.kwargs['uidb64']
-        token = self.kwargs['token']
-        
-        try:
-            uid = urlsafe_base64_decode(uidb64).decode()
-            user = User.objects.get(pk=uid)
-            
-            if default_token_generator.check_token(user, token):
-                new_password = form.cleaned_data['password']
-                user.set_password(new_password)
-                user.save()
-                return redirect(self.success_url)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            pass  # Handle errors here or redirect to an error page
-        
-        return self.render_to_response(self.get_context_data(form=form, validlink=True))
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['custom_action_url'] = reverse_lazy('accounts:password_reset_confirm', kwargs={'uidb64': self.kwargs['uidb64'], 'token': self.kwargs['token']})
+        return context
 
 
+
+    
 class UserPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
 	template_name = 'accounts/password_reset_complete.html'
 

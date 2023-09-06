@@ -88,12 +88,12 @@ class EditUserForm(forms.ModelForm):
 class UserPasswordResetForm(PasswordResetForm):
 	email = forms.EmailField(label='email address', widget=forms.TextInput(attrs={'class':'form-control'}))
 
-class UserEnterNewPassword(SetPasswordForm):
-	password = forms.CharField(label='New password',  widget=forms.PasswordInput(attrs={'class':'form-control'}))
-	cpassword = forms.CharField(label='Confirm password',  widget=forms.PasswordInput(attrs={'class':'form-control'}))
+# class UserEnterNewPassword(SetPasswordForm):
+	# password = forms.CharField(label='New password',  widget=forms.PasswordInput(attrs={'class':'form-control'}))
+	# cpassword = forms.CharField(label='Confirm password',  widget=forms.PasswordInput(attrs={'class':'form-control'}))
 
-	def __init__(self, user, *args, **kwargs):
-		super(UserEnterNewPassword, self).__init__(user, *args, **kwargs)
+	# def __init__(self, user, *args, **kwargs):
+		# super(UserEnterNewPassword, self).__init__(user, *args, **kwargs)
 
 
 	
