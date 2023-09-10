@@ -1,11 +1,12 @@
 from typing import Any
 from django import http
-from .models import User,Relation
+from .models import User,Relation, Notification
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http.response import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from django.views import View
 from .forms import UserRegistrationForm, UserLoginForm, EditUserForm, UserPasswordResetForm, CustomPasswordResetConfirmForm
 from django.contrib import messages
@@ -19,6 +20,8 @@ from django.contrib.auth.views import PasswordResetConfirmView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode
+from webpush import send_user_notification
+
 
 
 class UserRegisterView(View):
@@ -184,7 +187,46 @@ class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
 
     
 class UserPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
-	template_name = 'accounts/password_reset_complete.html'
+	template_name = 'accounts/password_change_message.html'
+
+
+class SendNotificationView(View):
+    def send_notification(self, user, message):
+        followers = user.profile.followers.all()  # Assuming you have a UserProfile model with a followers field
+        for follower in followers:
+            send_user_notification(
+                user=follower,
+                payload={"head": "New Post Alert", "body": message},
+                ttl=1000,
+                require_interaction=True
+            )
+
+    def send_new_comment_notification(self, user, comment):
+        # Get the user who made the comment
+        comment_author = comment.user
+        
+        # Get the followers of the user who made the comment
+        followers = comment_author.profile.followers.all()
+
+        # Construct the notification message (customize as needed)
+        notification_message = f"{comment_author.username} commented on a post."
+
+        # Send notifications to followers
+        for follower in followers:
+            send_user_notification(
+                user=follower,
+                payload={"head": "New Comment Alert", "body": notification_message},
+                ttl=1000,
+                require_interaction=True
+            )
+
+def get_notifications(request):
+    notifications = Notification.objects.all()
+    serialized_notifications = [{'message': notification.message} for notification in notifications]
+    return JsonResponse(serialized_notifications, safe=False)
+
+
+
 
 
         

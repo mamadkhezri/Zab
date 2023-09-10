@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'posts.apps.PostsConfig',
     'multiupload',
     'taggit',
+    'webpush',
 ]
 
 MIDDLEWARE = [
@@ -158,3 +159,11 @@ EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD = 'ujpfztbzkcxdphdb'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Zab'
+
+# Web push conf
+
+WEBPUSH_SETTINGS = {
+    "VAPID_PUBLIC_KEY": "BIWWII_wZtt0modF8BDPVezzGtdmLFmNraHA5Xuyil3iM_kR6JQ-sAQKL7t6w-idGmIO6ZS7JytzCjht6Ac84X0",
+    "VAPID_PRIVATE_KEY": "aZjgBt5AV4wFyHjAYEaZJc5vGS3oXRkxPEqNuU64guQ",
+    "VAPID_ADMIN_EMAIL": "mailto:airplanepictures2@gmail.com",
+}

@@ -37,8 +37,14 @@
                     </li>
                     {% if request.user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link text-light" href="{% url 'posts:post_create'%}">Create post</a>
+                            <a class="nav-link text-light" href="{% url 'posts:post_create'%}">Create</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="#" id="notificationButton" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                            Notifications
+                        </a>
+                    </li>
+                    
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -74,12 +80,59 @@
         </div>
     </nav>
 
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- This is where your notifications will be displayed -->
+                    <ul class="list-group" id="notificationList">
+                        <!-- Notifications will be dynamically added here -->
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
 
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+        <script>
+            // Function to load notifications
+            function loadNotifications() {
+                // Assuming you have an API endpoint to retrieve notifications
+                // You'll need to replace '/api/get_notifications/' with your actual endpoint
+                fetch('/api/get_notifications/')
+                    .then(response => response.json())
+                    .then(data => {
+                        const notificationList = document.getElementById('notificationList');
+                        notificationList.innerHTML = ''; // Clear existing notifications
+        
+                        data.forEach(notification => {
+                            const listItem = document.createElement('li');
+                            listItem.classList.add('list-group-item');
+                            listItem.textContent = notification.message;
+                            notificationList.appendChild(listItem);
+                        });
+                    });
+            }
+        
+            // Event listener for when the modal is shown
+            document.getElementById('notificationModal').addEventListener('shown.bs.modal', function () {
+                loadNotifications();
+            });
+        </script>
+        
 
 </body>
 
