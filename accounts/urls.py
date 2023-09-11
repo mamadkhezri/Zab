@@ -15,7 +15,8 @@ urlpatterns = [
     path('reset/done/', views.UserPasswordResetDoneView.as_view(), name='password_reset_done'),
 	path('confirm/<uidb64>/<token>/', views.UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 	path('confirm/complete', views.UserPasswordResetCompleteView.as_view(), name='password_reset_complete'),
-    path('send_notification/', views.SendNotificationView.as_view(), name='send_notification'),
+    path('send_notification/', views.display_notifications.as_view(), name='send_notification'),
+    path('mark_notification_as_viewed/<int:notification_id>/', views.mark_notification_as_viewed, name='mark_notification')
 
     
 ]

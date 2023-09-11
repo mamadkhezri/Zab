@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import Relation, Profile, User
+from .models import Relation, Profile, User, Notification
 from .forms import UserCreationForm, UserChangeForm
 
 class UserAdmin(BaseUserAdmin):
@@ -45,6 +45,7 @@ class ExtendedUserAdmin(UserAdmin):
 admin.site.register(User, UserAdmin)
 admin.site.register(Relation)
 admin.site.register(Profile)
+admin.site.register(Notification)
 
 
 
