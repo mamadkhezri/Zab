@@ -190,17 +190,18 @@ class UserPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
 	template_name = 'accounts/password_change_message.html'
 
 
-class display_notifications(View):
-    def get (self, request):
-        notifications = Notification.objects.filter(user=request.user).order_by('-timestamp')
-        return render(request, 'notifications.html', {'notifications': notifications})
-    
-class mark_notification_as_viewed(View):
-    def get (self, request ,notification_id):
-        notification = Notification.objects.get(id=notification_id)
-        notification.viewed  = True
+class GetNotificationsView(View):
+    def get(self, request):
+        notifications = Notification.objects.filter(user=request.user, viewed=False).order_by('-timestamp')
+        notifications_data = [{'message': n.message, 'id': n.id} for n in notifications]
+        return JsonResponse({'notifications': notifications_data})
+
+class MarkNotificationAsViewedView(View):
+    def post(self, request, notification_id):
+        notification = get_object_or_404(Notification, id=notification_id)
+        notification.viewed = True
         notification.save()
-        return redirect('notification')
+        return JsonResponse({'message': 'Notification marked as viewed'})
 
 
 

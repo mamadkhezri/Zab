@@ -40,11 +40,10 @@
                             <a class="nav-link text-light" href="{% url 'posts:post_create'%}">Create</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-light" href="#" id="notificationButton" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                        <a class="nav-link text-light" href="" id="notification-modal" data-bs-toggle="modal" data-bs-target="#notification-modal">
                             Notifications
                         </a>
                     </li>
-                    
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -80,17 +79,15 @@
         </div>
     </nav>
 
-    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal fade" id="notification-modal" tabindex="-1" aria-labelledby="notification-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+                    <h5 class="modal-title" id="notification-modal-label">Notifications</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- This is where your notifications will be displayed -->
-                    <ul class="list-group" id="notificationList">
-                        <!-- Notifications will be dynamically added here -->
+                    <ul id="notification-list">
                     </ul>
                 </div>
                 <div class="modal-footer">
@@ -99,42 +96,12 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-x6WxIoGqA2g7S6zF5puHjUw7Ru3wHN7ppG1IuU1iUAd5lNUbDzP5Vclh6Fqbv8aa" crossorigin="anonymous"></script>
+    <script src="{% static 'js/notifications.js' %}"></script>
     
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Function to fetch notifications
-                function getNotifications() {
-                    fetch('/send_notification/')  // Use the correct URL to your send_notification view
-                        .then(response => response.json())
-                        .then(data => displayNotifications(data));
-                }
-            
-                // Function to display notifications in the modal
-                function displayNotifications(notifications) {
-                    const notificationList = document.getElementById('notificationList');
-            
-                    notifications.forEach(notification => {
-                        const listItem = document.createElement('li');
-                        listItem.classList.add('list-group-item');
-                        listItem.innerText = notification.message;
-                        notificationList.appendChild(listItem);
-                    });
-                }
-            
-                // Show modal when it's time to display notifications
-                $('#notificationModal').on('show.bs.modal', function (e) {
-                    getNotifications();
-                });
-            });
-            </script>
-
+    
+        
 </body>
 
 </html>
