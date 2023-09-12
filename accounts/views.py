@@ -191,17 +191,18 @@ class UserPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
 
 
 class GetNotificationsView(View):
+    template_name = 'accounts/notifications.html'
+
     def get(self, request):
-        notifications = Notification.objects.filter(user=request.user, viewed=False).order_by('-timestamp')
-        notifications_data = [{'message': n.message, 'id': n.id} for n in notifications]
-        return JsonResponse({'notifications': notifications_data})
+        notifications = Notification.objects.filter(user=request.user).order_by('-timestamp')
+        return render(request, self.template_name , {'notifications': notifications})
 
 class MarkNotificationAsViewedView(View):
     def post(self, request, notification_id):
-        notification = get_object_or_404(Notification, id=notification_id)
-        notification.viewed = True
-        notification.save()
-        return JsonResponse({'message': 'Notification marked as viewed'})
+       notification = Notification.objects.get(id=notification_id)
+       notification.viewed = True
+       notification.save()
+       return redirect('notifications')
 
 
 
