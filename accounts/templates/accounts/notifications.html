@@ -8,7 +8,8 @@
 <body>
     {% for notification in notifications %}
     <div class="{% if notification.viewed %}viewed{% else %}unviewed{% endif %}">
-        {{ notification.message }}
+        {{ notification.message | safe  }} <br><hr>
+        {{ notification.post.pk }} / {{ notification.post.slug }}
     </div>
     {% endfor %}
 </body>

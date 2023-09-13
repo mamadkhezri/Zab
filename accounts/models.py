@@ -65,6 +65,7 @@ class Profile(models.Model):
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.CharField(max_length=100)
+    link = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
     viewed  = models.BooleanField(default=False)
 

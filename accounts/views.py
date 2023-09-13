@@ -23,6 +23,8 @@ from django.utils.http import urlsafe_base64_decode
 from webpush import send_user_notification
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import ListView
+
 
 
 
@@ -194,20 +196,10 @@ class UserPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
 	template_name = 'accounts/password_change_message.html'
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class CreateNotificationView(View):
-    def post(self, request, *args, **kwargs):
-        instance = kwargs.get('instance')
-        if instance:
-            followers = instance.user.followers.all()
-            for follower in followers:
-                Notification.objects.create(recipient=follower, sender=instance.user, activity_type="activity_type")
-        return HttpResponse(status=200)
-    
-class NotificationView(View):
-    def get(self, request):
-        notifications = Notification.objects.filter(user=request.user, viewed=False)
-        return render(request, 'accounts/notifications.html', {'notifications': notifications})
+class NotificationListView(ListView):
+    model = Notification
+    template_name = 'accounts/notifications.html'
+    context_object_name = 'notifications'
 
 
 

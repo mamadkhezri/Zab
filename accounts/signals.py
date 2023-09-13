@@ -3,7 +3,6 @@ from django.dispatch import receiver
 from .models import Profile, User, Notification, Relation
 from django.core.handlers.wsgi import WSGIRequest
 from django.test.client import RequestFactory
-from .views import CreateNotificationView
 from posts.models import Post, Comment
 from django.urls import reverse
 
@@ -21,21 +20,20 @@ def save_profile(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Post)
-def create_post_notification(sender, instance, created, **kwargs):
+def notify_followers_new_post(sender, instance, created, **kwargs):
     if created:
-        request = RequestFactory().get(reverse('create-notification', kwargs={'pk': instance.pk}))
-        response = CreateNotificationView.as_view()(request, instance=instance)
+        for relation in instance.author.followers.all():
+            Notification.objects.create(
+                user=relation.from_author,  
+                message=f'{instance.author.username} wrote a new post: <a href="/posts/post_detail{instance.pk}/">{instance.title}</a>',
+                link=f'/post/{instance.pk}/'
+            )
 
 @receiver(post_save, sender=Comment)
-def create_comment_notification(sender, instance, created, **kwargs):
+def notify_post_owner_new_comment(sender, instance, created, **kwargs):
     if created:
-        request = RequestFactory().get(reverse('create-notification', kwargs={'pk': instance.pk}))
-        response = CreateNotificationView.as_view()(request, instance=instance)
-
-@receiver(post_save, sender=Relation)
-def create_follow_notification(sender, instance, created, **kwargs):
-    if created:
-        # Check if both users are following each other
-        if Relation.objects.filter(from_author=instance.to_author, to_author=instance.from_author).exists():
-            request = RequestFactory().get(reverse('create-notification', kwargs={'pk': instance.pk}))
-            response = CreateNotificationView.as_view()(request, instance=instance)
+        Notification.objects.create(
+            user=instance.post.user,
+            message=f'{instance.author.username} wrote a new post: {instance.content}',
+            link=f'/post/{instance.post.pk}/'
+        )
