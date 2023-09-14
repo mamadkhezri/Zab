@@ -6,10 +6,12 @@
     <title>notification</title>
 </head>
 <body>
-    {% for notification in notifications %}
+    {% for notification in notifications reversed  %}
     <div class="{% if notification.viewed %}viewed{% else %}unviewed{% endif %}">
+        <img src="{% if notification.user.profile.image %}{{ notification.user.profile.image.url }}{% else %}{{ notification.user.profile.get_image_display }}{% endif %}" alt="Profile Picture">
         {{ notification.message | safe  }} <br><hr>
-        {{ notification.post.pk }} / {{ notification.post.slug }}
+        {{ notification.post.pk }} {{ notification.post.slug }}
+        Date: {{ notification.timestamp|timesince  }} <br>
     </div>
     {% endfor %}
 </body>

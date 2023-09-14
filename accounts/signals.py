@@ -19,13 +19,18 @@ def save_profile(sender, instance, **kwargs):
         instance.profile.save()
 
 
+
 @receiver(post_save, sender=Post)
 def notify_followers_new_post(sender, instance, created, **kwargs):
     if created:
+        post_id = instance.pk
+        post_slug = instance.slug
+        url = reverse('posts:post_detail', kwargs={'post_id': post_id, 'post_slug': post_slug})
+
         for relation in instance.author.followers.all():
             Notification.objects.create(
                 user=relation.from_author,  
-                message=f'{instance.author.username} wrote a new post: <a href="/posts/post_detail{instance.pk}/">{instance.title}</a>',
+                message=f'{instance.author.username} wrote a new post: <a href="{url}">{instance.title}</a>',
                 link=f'/post/{instance.pk}/'
             )
 

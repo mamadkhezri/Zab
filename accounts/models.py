@@ -11,7 +11,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=30, unique=True)
     full_name = models.CharField(max_length=70)
     phone_number = models.CharField(max_length=15, unique=True)
-    profile_picture = models.ImageField(upload_to="profile_pictures/", blank=True, null=True)
+    profile_picture = models.ImageField(upload_to="blog/", blank=True, null=True)
     bio = models.TextField(blank=True)
     location = models.CharField(max_length=100, blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
